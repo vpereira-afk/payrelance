@@ -835,7 +835,7 @@ function vDashboard(){
   const ago = d => { const k=S.day-d; return k<=0?'Aujourd’hui':k===1?'Hier':`Il y a ${k} j`; };
   const banner = q.length ? `<div class="banner coral"><div class="bi" style="color:var(--coral-ink)">${ic('zap',20)}</div><div class="bt"><b>${q.length} ${plural(q.length,'relance prête','relances prêtes')} pour ${eur(q.reduce((s,x)=>s+x.inv.amount,0))} d’impayés</b><span>PayRelance a détecté les retards et préparé les messages. Aucun message ne part sans votre validation.</span></div><div class="actions"><button class="btn btn-ghost btn-sm" data-a="go" data-v="validation">Voir les relances</button><button class="btn btn-green btn-sm" data-a="approve-all">${ic('check',15)}Tout valider en 1 clic</button></div></div>` : '';
   return `
-  <div class="page-head"><div><h1>Bonjour ${esc(S.user.first)} 👋</h1><p>Voici l’état de votre trésorerie client au ${fmtDL(S.day)}.</p></div>
+  <div class="page-head"><div><h1>Bonjour ${esc(S.user.first)} 👋</h1><p>${fmtDL(S.day)}</p></div>
     <div class="actions"><button class="btn btn-ghost" data-a="go" data-v="relances">${ic('send',16)}Scénarios</button><button class="btn btn-primary" data-a="import">${ic('plus',16)}Ajouter / importer des factures</button></div></div>
   ${banner}${realTestBanner()}
   <div class="grid g4" style="margin-bottom:16px">
