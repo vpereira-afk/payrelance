@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PayRelance — Plateforme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F7FB; --surface:#FFFFFF; --surface-2:#F1F5F9; --text:#0F172A; --muted:#5B6B83; --dim:#94A3B8;
+  --line:#E2E8F0; --line-strong:#CBD5E1;
+  --brand:#1E3A8A; --brand-btn:#1E3A8A; --brand-hover:#17306F; --brand-soft:#E8EEFC;
+  --green:#10B981; --green-btn:#0EA371; --green-soft:#E3F7EE; --green-ink:#047857;
+  --coral:#F43F5E; --coral-soft:#FFE8EC; --coral-ink:#BE123C;
+  --amber-soft:#FEF3C7; --amber-ink:#92400E;
+  --shadow:0 1px 2px rgba(15,23,42,.05),0 10px 28px -14px rgba(15,23,42,.14);
+  --font-d:'Plus Jakarta Sans','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-b:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A101E; --surface:#111A2D; --surface-2:#16213A; --text:#E8EDF8; --muted:#97A5C2; --dim:#6B7A99;
+    --line:#1F2B45; --line-strong:#2C3B5E;
+    --brand:#8FA9F7; --brand-btn:#4A6EE0; --brand-hover:#5B7FEE; --brand-soft:rgba(91,127,238,.16);
+    --green:#34D399; --green-btn:#10B981; --green-soft:rgba(16,185,129,.16); --green-ink:#34D399;
+    --coral:#FB7185; --coral-soft:rgba(244,63,94,.16); --coral-ink:#FB7185;
+    --amber-soft:rgba(245,158,11,.16); --amber-ink:#FBBF24;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A101E; --surface:#111A2D; --surface-2:#16213A; --text:#E8EDF8; --muted:#97A5C2; --dim:#6B7A99;
+  --line:#1F2B45; --line-strong:#2C3B5E;
+  --brand:#8FA9F7; --brand-btn:#4A6EE0; --brand-hover:#5B7FEE; --brand-soft:rgba(91,127,238,.16);
+  --green:#34D399; --green-btn:#10B981; --green-soft:rgba(16,185,129,.16); --green-ink:#34D399;
+  --coral:#FB7185; --coral-soft:rgba(244,63,94,.16); --coral-ink:#FB7185;
+  --amber-soft:rgba(245,158,11,.16); --amber-ink:#FBBF24;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px -14px rgba(0,0,0,.5);
+}
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:border-box; }
+*{ margin:0; padding:0; }
+body{ background:var(--bg); color:var(--text); font-family:var(--font-b); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+body.noscroll{ overflow:hidden; }
+button{ font-family:inherit; font-size:inherit; color:inherit; cursor:pointer; border:none; background:none; }
+input,select,textarea{ font-family:inherit; font-size:inherit; color:var(--text); }
+a{ color:inherit; }
+svg{ display:block; flex-shrink:0; }
+:focus-visible{ outline:2px solid var(--brand-btn); outline-offset:2px; border-radius:6px; }
+h1,h2,h3,h4{ font-family:var(--font-d); letter-spacing:-.01em; line-height:1.2; }
+.mono{ font-variant-numeric:tabular-nums; }
+
+/* ---------- layout ---------- */
+.sidebar{ position:fixed; left:0; top:env(safe-area-inset-top,0px); bottom:env(safe-area-inset-bottom,0px); width:252px; background:var(--surface); border-right:1px solid var(--line); display:flex; flex-direction:column; padding:18px 14px; z-index:60; transition:transform .25s ease; }
+.brand{ display:flex; align-items:center; gap:10px; padding:4px 8px 18px; font-family:var(--font-d); font-weight:800; font-size:19px; color:var(--text); }
+.brand small{ display:block; font-weight:500; font-size:11px; color:var(--muted); font-family:var(--font-b); margin-top:-2px; }
+.nav{ display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto; }
+.nav-label{ font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); padding:14px 10px 6px; }
+.nav-item{ display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:10px; color:var(--muted); font-weight:500; text-align:left; width:100%; }
+.nav-item:hover{ background:var(--surface-2); color:var(--text); }
+.nav-item.active{ background:var(--brand-soft); color:var(--brand); font-weight:600; }
+.nav-item .badge-n{ margin-left:auto; background:var(--coral); color:#fff; font-size:11px; font-weight:700; border-radius:999px; min-width:20px; height:20px; padding:0 6px; display:flex; align-items:center; justify-content:center; }
+.trial-card{ margin-top:10px; border:1px solid var(--line); background:linear-gradient(160deg,var(--brand-soft),transparent); border-radius:14px; padding:14px; }
+.trial-card b{ font-family:var(--font-d); font-size:13px; }
+.trial-card p{ color:var(--muted); font-size:12px; margin:4px 0 10px; }
+.bar{ height:6px; border-radius:99px; background:var(--line); overflow:hidden; }
+.bar>i{ display:block; height:100%; border-radius:99px; background:var(--green); }
+.main{ margin-left:252px; min-height:100%; }
+.topbar{ position:sticky; top:env(safe-area-inset-top,0px); z-index:40; display:flex; align-items:center; gap:12px; padding:12px 28px; background:color-mix(in srgb,var(--bg) 88%,transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+.hamburger{ display:none; width:38px; height:38px; border-radius:10px; align-items:center; justify-content:center; border:1px solid var(--line); background:var(--surface); }
+.search{ position:relative; flex:1; max-width:380px; }
+.search svg{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--dim); }
+.search input{ width:100%; height:38px; border-radius:10px; border:1px solid var(--line); background:var(--surface); padding:0 12px 0 38px; }
+.search input:focus{ outline:none; border-color:var(--brand-btn); box-shadow:0 0 0 3px var(--brand-soft); }
+.top-right{ margin-left:auto; display:flex; align-items:center; gap:10px; }
+.demo-chip{ display:flex; align-items:center; gap:8px; height:38px; padding:0 6px 0 12px; border:1px dashed var(--line-strong); border-radius:10px; color:var(--muted); font-size:12px; background:var(--surface); }
+.demo-chip button{ height:28px; padding:0 10px; border-radius:8px; background:var(--brand-soft); color:var(--brand); font-weight:600; display:flex; align-items:center; gap:6px; }
+.demo-chip button:hover{ background:var(--brand-btn); color:#fff; }
+.icon-btn{ position:relative; width:38px; height:38px; border-radius:10px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--muted); }
+.icon-btn:hover{ color:var(--text); border-color:var(--line-strong); }
+.dot{ position:absolute; top:7px; right:8px; width:9px; height:9px; border-radius:50%; background:var(--coral); border:2px solid var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,var(--brand-btn),var(--green)); color:#fff; font-weight:700; font-family:var(--font-d); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; }
+.user-btn{ display:flex; align-items:center; gap:9px; padding:3px 8px 3px 3px; border-radius:99px; border:1px solid var(--line); background:var(--surface); }
+.user-btn span{ font-weight:600; font-size:13px; }
+.dropdown{ position:absolute; right:0; top:calc(100% + 8px); min-width:260px; max-width:92vw; background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:8px; z-index:70; display:none; }
+.dropdown.open{ display:block; }
+.dd-item{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:9px; width:100%; text-align:left; color:var(--text); }
+.dd-item:hover{ background:var(--surface-2); }
+.dd-sep{ height:1px; background:var(--line); margin:6px 4px; }
+.dd-title{ padding:8px 10px 6px; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.07em; font-weight:600; }
+.seg{ display:flex; gap:4px; padding:4px; background:var(--surface-2); border-radius:10px; margin:2px 4px 6px; }
+.seg button{ flex:1; padding:6px 0; border-radius:7px; font-size:12px; font-weight:600; color:var(--muted); }
+.seg button.on{ background:var(--surface); color:var(--text); box-shadow:var(--shadow); }
+.rel{ position:relative; }
+.notif-item{ display:flex; gap:10px; padding:10px; border-radius:9px; }
+.notif-item.unread{ background:var(--brand-soft); }
+.notif-item .ni{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.content{ padding:26px 28px 60px; max-width:1320px; }
+.page-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:20px; }
+.page-head h1{ font-size:26px; font-weight:800; }
+.page-head p{ color:var(--muted); margin-top:4px; }
+.actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* ---------- ui kit ---------- */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:7px; height:38px; padding:0 16px; border-radius:10px; font-weight:600; border:1px solid transparent; white-space:nowrap; transition:background .15s, transform .1s, border-color .15s; }
+.btn:active{ transform:translateY(1px); }
+.btn-primary{ background:var(--brand-btn); color:#fff; }
+.btn-primary:hover{ background:var(--brand-hover); }
+.btn-green{ background:var(--green-btn); color:#fff; }
+.btn-green:hover{ filter:brightness(1.07); }
+.btn-ghost{ background:var(--surface); border-color:var(--line-strong); color:var(--text); }
+.btn-ghost:hover{ border-color:var(--brand-btn); color:var(--brand); }
+.btn-coral{ background:var(--coral-soft); color:var(--coral-ink); }
+.btn-coral:hover{ background:var(--coral); color:#fff; }
+.btn-sm{ height:30px; padding:0 11px; font-size:12.5px; border-radius:8px; }
+.btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); }
+.card-pad{ padding:20px; }
+.card h3{ font-size:15px; font-weight:700; }
+.card-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.sub{ color:var(--muted); font-size:12.5px; }
+.badge{ display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:99px; font-size:12px; font-weight:600; white-space:nowrap; }
+.b-red{ background:var(--coral-soft); color:var(--coral-ink); }
+.b-green{ background:var(--green-soft); color:var(--green-ink); }
+.b-blue{ background:var(--brand-soft); color:var(--brand); }
+.b-gray{ background:var(--surface-2); color:var(--muted); }
+.b-amber{ background:var(--amber-soft); color:var(--amber-ink); }
+.grid{ display:grid; gap:16px; grid-template-columns:minmax(0,1fr); }
+.grid>*{ min-width:0; }
+.g4{ grid-template-columns:repeat(4,1fr); }
+.g2{ grid-template-columns:1fr 1fr; }
+.g-main{ grid-template-columns:minmax(0,1.7fr) minmax(0,1fr); align-items:start; }
+.kpi{ padding:18px; }
+.kpi .lab{ display:flex; align-items:center; gap:8px; color:var(--muted); font-weight:500; font-size:13px; }
+.kpi .ico{ width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; }
+.kpi .val{ font-family:var(--font-d); font-size:28px; font-weight:800; margin:10px 0 2px; letter-spacing:-.02em; }
+.kpi .note{ font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.banner{ display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px; margin-bottom:18px; flex-wrap:wrap; }
+.banner.coral{ background:var(--coral-soft); border:1px solid color-mix(in srgb,var(--coral) 35%,transparent); }
+.banner.blue{ background:var(--brand-soft); border:1px solid color-mix(in srgb,var(--brand-btn) 30%,transparent); }
+.banner.green{ background:var(--green-soft); border:1px solid color-mix(in srgb,var(--green) 35%,transparent); }
+.banner .bi{ width:38px; height:38px; border-radius:11px; background:var(--surface); display:flex; align-items:center; justify-content:center; }
+.banner .bt{ flex:1; min-width:220px; }
+.banner .bt b{ display:block; font-family:var(--font-d); }
+.banner .bt span{ color:var(--muted); font-size:13px; }
+.tablewrap{ overflow-x:auto; }
+table{ width:100%; border-collapse:collapse; }
+th{ text-align:left; font-size:11.5px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--dim); padding:10px 14px; border-bottom:1px solid var(--line); white-space:nowrap; background:var(--surface); }
+th.sortable{ cursor:pointer; user-select:none; }
+th.sortable:hover{ color:var(--text); }
+td{ padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:middle; }
+tbody tr:last-child td{ border-bottom:none; }
+tbody tr.clickable{ cursor:pointer; }
+tbody tr.clickable:hover td{ background:var(--surface-2); }
+td.num,th.num{ text-align:right; }
+.cell-main{ font-weight:600; }
+.cell-sub{ color:var(--muted); font-size:12.5px; }
+.pills{ display:flex; gap:6px; flex-wrap:wrap; }
+.pill{ height:32px; padding:0 13px; border-radius:99px; border:1px solid var(--line); background:var(--surface); font-weight:500; color:var(--muted); display:inline-flex; align-items:center; gap:7px; }
+.pill.on{ background:var(--brand-btn); color:#fff; border-color:var(--brand-btn); }
+.pill i{ font-style:normal; font-size:11.5px; opacity:.85; }
+.toolbar{ display:flex; align-items:center; gap:12px; justify-content:space-between; flex-wrap:wrap; padding:14px 16px; border-bottom:1px solid var(--line); }
+.empty{ text-align:center; padding:48px 20px; color:var(--muted); }
+.empty .ei{ width:56px; height:56px; border-radius:50%; background:var(--green-soft); color:var(--green-ink); margin:0 auto 14px; display:flex; align-items:center; justify-content:center; }
+.field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+.field label{ font-weight:600; font-size:12.5px; }
+.field input,.field select,.field textarea{ height:40px; border-radius:10px; border:1px solid var(--line-strong); background:var(--surface); padding:0 12px; width:100%; }
+.field textarea{ height:auto; min-height:120px; padding:10px 12px; line-height:1.5; resize:vertical; }
+.field input:focus,.field select:focus,.field textarea:focus{ outline:none; border-color:var(--brand-btn); box-shadow:0 0 0 3px var(--brand-soft); }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.switch{ position:relative; width:42px; height:24px; flex-shrink:0; }
+.switch input{ position:absolute; inset:0; opacity:0; cursor:pointer; z-index:2; width:100%; height:100%; }
+.switch i{ position:absolute; inset:0; border-radius:99px; background:var(--line-strong); transition:background .2s; }
+.switch i::after{ content:""; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .2s; box-shadow:0 1px 3px rgba(0,0,0,.25); }
+.switch input:checked + i{ background:var(--green-btn); }
+.switch input:checked + i::after{ transform:translateX(18px); }
+.setting{ display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid var(--line); }
+.setting:last-child{ border-bottom:none; }
+.setting .st{ flex:1; }
+.setting .st b{ display:block; font-weight:600; }
+.setting .st span{ color:var(--muted); font-size:12.5px; }
+
+/* ---------- overlays ---------- */
+.overlay{ position:fixed; inset:0; background:rgba(8,13,26,.55); backdrop-filter:blur(3px); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px; }
+.modal{ background:var(--surface); border:1px solid var(--line); border-radius:18px; width:100%; max-width:560px; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px -20px rgba(0,0,0,.45); }
+.modal.wide{ max-width:760px; }
+.modal-h{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:20px 22px 6px; }
+.modal-h h2{ font-size:19px; font-weight:800; }
+.modal-b{ padding:10px 22px 6px; }
+.modal-f{ display:flex; justify-content:flex-end; gap:8px; padding:14px 22px 20px; flex-wrap:wrap; }
+.x{ width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; color:var(--muted); flex-shrink:0; }
+.x:hover{ background:var(--surface-2); color:var(--text); }
+.drawer-bg{ position:fixed; inset:0; background:rgba(8,13,26,.45); z-index:90; display:flex; justify-content:flex-end; }
+.drawer{ width:480px; max-width:100%; background:var(--surface); height:100%; overflow-y:auto; box-shadow:-20px 0 60px -20px rgba(0,0,0,.4); animation:slide .22s ease; }
+@keyframes slide{ from{ transform:translateX(30px); opacity:.5; } to{ transform:none; opacity:1; } }
+.drawer-h{ padding:20px 22px 14px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:12px; }
+.drawer-b{ padding:18px 22px 30px; }
+.kv{ display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; margin:14px 0 18px; }
+.kv div span{ display:block; font-size:12px; color:var(--muted); }
+.kv div b{ font-weight:600; }
+.copybox{ display:flex; gap:8px; align-items:center; padding:8px 8px 8px 12px; border:1px dashed var(--line-strong); border-radius:10px; background:var(--surface-2); }
+.copybox code{ flex:1; font-size:12.5px; color:var(--brand); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.timeline{ position:relative; margin-top:6px; padding-left:22px; }
+.timeline::before{ content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:var(--line); }
+.tl{ position:relative; padding:0 0 16px; }
+.tl::before{ content:""; position:absolute; left:-20px; top:5px; width:12px; height:12px; border-radius:50%; background:var(--surface); border:2px solid var(--line-strong); }
+.tl.green::before{ border-color:var(--green); background:var(--green); }
+.tl.blue::before{ border-color:var(--brand-btn); }
+.tl.coral::before{ border-color:var(--coral); }
+.tl b{ font-weight:600; }
+.tl small{ display:block; color:var(--muted); }
+.toast-wrap{ position:fixed; bottom:calc(20px + env(safe-area-inset-bottom,0px)); right:20px; z-index:200; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+.toast{ background:#0F172A; color:#fff; padding:12px 16px; border-radius:12px; box-shadow:0 14px 40px -10px rgba(0,0,0,.5); display:flex; gap:10px; align-items:center; max-width:380px; animation:pop .25s ease; font-size:13.5px; }
+.toast.ok svg{ color:#34D399; }
+.toast.warn svg{ color:#FBBF24; }
+@keyframes pop{ from{ transform:translateY(10px); opacity:0; } to{ transform:none; opacity:1; } }
+
+/* ---------- specific ---------- */
+.chart-legend{ display:flex; flex-wrap:wrap; gap:6px 16px; font-size:12.5px; color:var(--muted); }
+.chart-legend i{ display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+.aging-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.aging-row .al{ width:64px; color:var(--muted); font-size:12.5px; }
+.aging-row .ab{ flex:1; height:10px; background:var(--surface-2); border-radius:99px; overflow:hidden; }
+.aging-row .ab i{ display:block; height:100%; background:var(--coral); border-radius:99px; transition:width .4s; }
+.aging-row .av{ width:80px; text-align:right; font-weight:600; font-size:13px; }
+.check{ display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.check:last-child{ border-bottom:none; }
+.check .cb{ width:22px; height:22px; border-radius:50%; border:2px solid var(--line-strong); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; color:#fff; }
+.check.done .cb{ background:var(--green); border-color:var(--green); }
+.check.done b{ color:var(--muted); text-decoration:line-through; }
+.check b{ display:block; font-weight:600; }
+.check span{ color:var(--muted); font-size:12.5px; }
+.feed{ display:flex; flex-direction:column; }
+.feed-item{ display:flex; gap:11px; padding:10px 0; border-bottom:1px solid var(--line); }
+.feed-item:last-child{ border-bottom:none; }
+.feed-item .fi{ width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.feed-item small{ color:var(--dim); display:block; }
+.ch{ display:inline-flex; align-items:center; gap:6px; font-weight:500; }
+.ch-ico{ width:26px; height:26px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; background:var(--brand-soft); color:var(--brand); }
+.scn{ display:flex; gap:12px; align-items:center; padding:12px; border:1px solid var(--line); border-radius:12px; width:100%; text-align:left; margin-bottom:8px; background:var(--surface); }
+.scn.on{ border-color:var(--brand-btn); background:var(--brand-soft); }
+.scn .sn{ flex:1; }
+.scn .sn b{ display:block; font-weight:600; }
+.steps{ display:flex; flex-direction:column; gap:10px; }
+.step{ display:grid; grid-template-columns:auto 82px 1fr 1fr auto auto; gap:10px; align-items:center; padding:12px 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface); }
+.step.sel{ border-color:var(--brand-btn); box-shadow:0 0 0 3px var(--brand-soft); }
+.step.off{ opacity:.55; }
+.step .sidx{ width:28px; height:28px; border-radius:50%; background:var(--brand-soft); color:var(--brand); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:12.5px; }
+.step input,.step select{ height:36px; border-radius:9px; border:1px solid var(--line-strong); background:var(--surface); padding:0 10px; width:100%; }
+.dayin{ display:flex; align-items:center; gap:6px; color:var(--muted); font-weight:600; }
+.dayin input{ text-align:center; padding:0 4px; }
+.preview{ border:1px solid var(--line); border-radius:14px; background:var(--surface-2); padding:16px; }
+.pv-mail{ background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.pv-mail .pv-h{ padding:10px 14px; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--muted); }
+.pv-mail .pv-h b{ color:var(--text); display:block; font-size:13.5px; }
+.pv-mail .pv-b{ padding:14px; white-space:pre-wrap; line-height:1.6; font-size:13.5px; }
+.bubble{ max-width:88%; padding:11px 14px; border-radius:16px 16px 16px 4px; white-space:pre-wrap; line-height:1.5; font-size:13.5px; }
+.bubble.sms{ background:#E5E7EB; color:#111827; }
+.bubble.wa{ background:#DCF8C6; color:#111827; }
+.bubble .meta{ display:block; font-size:11px; opacity:.6; margin-top:4px; text-align:right; }
+.paper{ background:#fff; color:#111827; border:1px solid var(--line); border-radius:6px; padding:22px 24px; white-space:pre-wrap; font-family:Georgia,'Times New Roman',serif; line-height:1.6; font-size:13px; box-shadow:var(--shadow); }
+.pv-link{ color:#2563EB; text-decoration:underline; }
+.qcard{ padding:18px; margin-bottom:14px; }
+.qhead{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px; }
+.qhead .qt{ flex:1; min-width:200px; }
+.qhead .qt b{ font-family:var(--font-d); font-size:15px; }
+.reassure{ display:flex; flex-wrap:wrap; gap:12px; align-items:flex-start; background:var(--green-soft); color:var(--green-ink); padding:12px 14px; border-radius:12px; font-weight:500; margin-bottom:16px; }
+.plan{ padding:22px; display:flex; flex-direction:column; position:relative; }
+.plan.cur{ border:2px solid var(--green); }
+.plan.pop{ border:2px solid var(--brand-btn); }
+.plan .tag{ position:absolute; top:-11px; left:20px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:99px; background:var(--brand-btn); color:#fff; }
+.plan .price{ font-family:var(--font-d); font-size:34px; font-weight:800; margin:8px 0 2px; }
+.plan .price small{ font-size:14px; font-weight:500; color:var(--muted); }
+.plan ul{ list-style:none; margin:16px 0 20px; display:flex; flex-direction:column; gap:9px; flex:1; }
+.plan li{ display:flex; gap:9px; color:var(--muted); }
+.plan li svg{ color:var(--green); margin-top:2px; }
+.integ{ padding:18px; display:flex; flex-direction:column; gap:12px; }
+.integ .it{ display:flex; gap:12px; align-items:center; }
+.logo-tile{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-d); font-weight:800; font-size:16px; flex-shrink:0; }
+.spin{ width:46px; height:46px; border-radius:50%; border:4px solid var(--line); border-top-color:var(--brand-btn); animation:sp .8s linear infinite; margin:18px auto; }
+@keyframes sp{ to{ transform:rotate(360deg); } }
+.stepper{ display:flex; gap:6px; margin-bottom:16px; }
+.stepper i{ flex:1; height:4px; border-radius:99px; background:var(--line); }
+.stepper i.on{ background:var(--brand-btn); }
+.scoreb{ width:90px; height:8px; border-radius:99px; background:var(--surface-2); overflow:hidden; display:inline-block; vertical-align:middle; margin-right:8px; }
+.scoreb i{ display:block; height:100%; background:var(--green); }
+.chips{ display:flex; gap:6px; flex-wrap:wrap; margin:6px 0 10px; }
+.chip{ padding:3px 9px; border-radius:99px; background:var(--surface-2); border:1px solid var(--line); font-size:12px; color:var(--muted); font-family:ui-monospace,Menlo,monospace; }
+.dz{ border:2px dashed var(--line-strong); border-radius:14px; padding:22px; text-align:center; color:var(--muted); background:var(--surface-2); }
+.dz:hover{ border-color:var(--brand-btn); }
+.tabs{ display:flex; gap:4px; padding:4px; background:var(--surface-2); border-radius:11px; margin-bottom:16px; }
+.tabs button{ flex:1; padding:8px; border-radius:8px; font-weight:600; color:var(--muted); }
+.tabs button.on{ background:var(--surface); color:var(--text); box-shadow:var(--shadow); }
+.hide-m{ }
+.pv-b,.bubble,.pv-mail{ overflow-wrap:anywhere; word-break:break-word; }
+.pay-page{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; background:radial-gradient(1200px 500px at 50% -10%,var(--brand-soft),transparent); }
+.pay-card{ width:100%; max-width:440px; background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:28px; box-shadow:var(--shadow); }
+.pay-sum{ text-align:center; padding:6px 0 18px; }
+.pay-amount{ font-family:var(--font-d); font-size:42px; font-weight:800; margin:4px 0; letter-spacing:-.02em; }
+code{ font-family:ui-monospace,Menlo,monospace; font-size:12px; background:var(--surface-2); padding:1px 5px; border-radius:5px; }
+button.badge{ border:none; font-family:inherit; white-space:normal; text-align:left; line-height:1.3; max-width:100%; }
+.relgrid{ grid-template-columns:minmax(0,280px) minmax(0,1fr); align-items:start; }
+.gstep{ display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.gstep:last-of-type{ border-bottom:none; }
+.gn{ width:22px; height:22px; border-radius:50%; border:2px solid var(--brand-btn); color:var(--brand); font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.gt{ flex:1; line-height:1.65; }
+a.btn{ text-decoration:none; }
+.integ .it .badge{ margin-left:auto; }
+.scrim{ display:none; }
+
+@media (max-width:1100px){
+  .g4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .g-main{ grid-template-columns:minmax(0,1fr); }
+  .relgrid{ grid-template-columns:minmax(0,1fr); }
+}
+@media (max-width:900px){
+  .sidebar{ transform:translateX(-102%); box-shadow:none; }
+  .sidebar.open{ transform:none; box-shadow:0 0 60px rgba(0,0,0,.4); }
+  .scrim.open{ display:block; position:fixed; inset:0; background:rgba(8,13,26,.5); z-index:55; }
+  .main{ margin-left:0; }
+  .hamburger{ display:flex; }
+  .topbar{ padding:10px 16px; }
+  .content{ padding:20px 16px 50px; }
+  .hide-m{ display:none !important; }
+  .g2{ grid-template-columns:minmax(0,1fr); }
+  .step{ grid-template-columns:auto 1fr; }
+  .step>*:nth-child(n+3){ grid-column:1 / -1; }
+  .search{ max-width:none; }
+}
+@media (max-width:560px){
+  .g4{ grid-template-columns:minmax(0,1fr); }
+  .row2{ grid-template-columns:minmax(0,1fr); }
+  .page-head h1{ font-size:22px; }
+  .kv{ grid-template-columns:1fr; }
+  .user-btn span{ display:none; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" id="sidebar" aria-label="Navigation principale"></aside>
+<div class="scrim" id="scrim" data-a="close-menu"></div>
+
+<div class="main">
+  <header class="topbar">
+    <button class="hamburger" data-a="open-menu" aria-label="Ouvrir le menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg></button>
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="gsearch" type="search" placeholder="Rechercher une facture, un client…" data-i="search" autocomplete="off" aria-label="Rechercher">
+    </div>
+    <div class="top-right">
+      <div class="demo-chip hide-m" title="Fait avancer le temps pour voir les relances se déclencher">
+        <span id="datechip"></span>
+        <button data-a="advance"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 19 22 12 13 5 13 19"/><polygon points="2 19 11 12 2 5 2 19"/></svg>+1 jour (démo)</button>
+      </div>
+      <div class="rel">
+        <button class="icon-btn" data-a="toggle-notifs" aria-label="Notifications"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot" id="notifdot" style="display:none"></span></button>
+        <div class="dropdown" id="notifmenu" style="width:360px"></div>
+      </div>
+      <div class="rel">
+        <button class="user-btn" data-a="toggle-user" aria-label="Menu du compte"><div class="avatar" id="avatar">J</div><span id="uname">Julien</span></button>
+        <div class="dropdown" id="usermenu"></div>
+      </div>
+    </div>
+  </header>
+  <main class="content" id="view"></main>
+</div>
+
+<div id="drawer"></div>
+<div id="modal"></div>
+<div class="toast-wrap" id="toasts" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* =========================================================
+   Helpers
+   ========================================================= */
+const BASE = new Date(); BASE.setHours(12,0,0,0);
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nb = s => String(s).replace(/[\u202f\u00a0]/g,' ');
+const eur = n => nb(Number(n).toLocaleString('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:0,maximumFractionDigits:2}));
+const dateOf = d => { const x=new Date(BASE); x.setDate(x.getDate()+d); return x; };
+const fmtD = d => dateOf(d).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+const fmtDL = d => dateOf(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+const fmtDM = d => dateOf(d).toLocaleDateString('fr-FR',{day:'numeric',month:'long'});
+const plural = (n,s,p) => n>1 ? (p||s+'s') : s;
+const uid = (()=>{ let n=1000; return ()=>'r'+(++n); })();
+
+/* =========================================================
+   Configuration de l'envoi réel
+   ---------------------------------------------------------
+   Pour que n'importe quel visiteur (ex. le professeur) reçoive de vrais e-mails
+   sans rien configurer, renseignez ici vos identifiants EmailJS (la clé publique
+   est faite pour être publique) avant d'héberger le fichier. Sinon, tout se règle
+   dans l'application : Intégrations › E-mail.
+   ========================================================= */
+const PRESET = { emailjs:{service:'',template:'',key:''}, publicUrl:'', payTpl:'' };
+let CFG = (function(){
+  const base = JSON.parse(JSON.stringify(PRESET));
+  try{
+    const s = JSON.parse(localStorage.getItem('payrelance-config')||'null');
+    if(s){ if(s.emailjs) Object.assign(base.emailjs,s.emailjs); if(s.publicUrl!=null) base.publicUrl=s.publicUrl; if(s.payTpl!=null) base.payTpl=s.payTpl; }
+  }catch(e){}
+  return base;
+})();
+function saveCfg(){ try{ localStorage.setItem('payrelance-config',JSON.stringify(CFG)); }catch(e){} }
+const emailReady = () => !!(CFG.emailjs.service && CFG.emailjs.template && CFG.emailjs.key);
+const isFictionalEmail = e => /\.(example|test|invalid)$/i.test(String(e||'')) || /@example\.(com|org|net)$/i.test(String(e||''));
+function normPhone(p){
+  let d = String(p||'').replace(/[^\d+]/g,'');
+  if(d.startsWith('+')) d=d.slice(1); else if(d.startsWith('00')) d=d.slice(2); else if(d.startsWith('0')) d='33'+d.slice(1);
+  return /^\d{8,15}$/.test(d) ? d : null;
+}
+const isFictionalPhone = p => (normPhone(p)||'').startsWith('3363998');
+const waUrl = (p,t) => 'https://wa.me/'+normPhone(p)+'?text='+encodeURIComponent(t);
+let lastSend = 0;
+async function emailjsSend(to,toName,subject,text,extra){
+  const c = CFG.emailjs;
+  const wait = Math.max(0, 1100-(Date.now()-lastSend));   // l'API limite à 1 requête / seconde
+  if(wait) await new Promise(r=>setTimeout(r,wait));
+  lastSend = Date.now();
+  const html = esc(text).replace(/\n/g,'<br>').replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" style="color:#1E3A8A">$1</a>');
+  const body = {service_id:c.service, template_id:c.template, user_id:c.key,
+    template_params:Object.assign({to_email:to,to_name:toName||'',from_name:S.user.first+' '+S.user.last,reply_to:S.user.email,subject:subject,message:text,message_html:html,invoice_number:'',amount:'',pay_link:'',company:S.user.company},extra||{})};
+  let res;
+  try{ res = await fetch('https://api.emailjs.com/api/v1.0/email/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}); }
+  catch(e){ throw new Error('réseau indisponible ou bloqué par le navigateur'); }
+  const t = await res.text();
+  if(!res.ok) throw new Error(t || ('erreur '+res.status));
+  return true;
+}
+
+
+const P = {
+  grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
+  send:'<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+  checkc:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/>',
+  users:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  scale:'<path d="M12 3v18M5 21h14M3 8l3.5 7a3.5 3.5 0 0 1-7 0zm18 0l3.5 7a3.5 3.5 0 0 1-7 0zM6 8h12" transform="translate(1.5 0) scale(.92)"/>',
+  link:'<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
+  gift:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+  card:'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5M12 3v12"/>',
+  mail:'<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M22 6l-10 7L2 6"/>',
+  sms:'<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/>',
+  wa:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>',
+  letter:'<path d="M4 4h16v16H4z"/><path d="M4 8l8 6 8-6"/><path d="M8 20v-4M16 20v-4" opacity="0"/>',
+  clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  trend:'<path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/>',
+  euro:'<path d="M18 7a7 7 0 1 0 0 10M4 10h10M4 14h10"/>',
+  x:'<path d="M18 6L6 18M6 6l12 12"/>',
+  chev:'<path d="M9 18l6-6-6-6"/>',
+  copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  check:'<path d="M20 6L9 17l-5-5"/>',
+  alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/>',
+  more:'<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+  pause:'<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',
+  trash:'<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>',
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  user:'<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+  arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>',
+  refresh:'<path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  play:'<polygon points="5 3 19 12 5 21 5 3"/>',
+  copy2:'<path d="M20 9h-9a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2z"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  help:'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',
+};
+const ic = (n,s=18,extra='') => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra}>${P[n]||''}</svg>`;
+const LOGO = (s=34) => `<svg width="${s}" height="${s}" viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#1E3A8A"/><path d="M24 16a8 8 0 1 1-2.6-5.9" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M22.5 5.8v5.1h-5.1" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.4 16.2l2.6 2.6 4.6-5" stroke="#10B981" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+const CH = {
+  email:{label:'E-mail', icon:'mail'},
+  whatsapp:{label:'WhatsApp', icon:'wa'}
+};
+const TONES = { friendly:'Amical & courtois', professional:'Professionnel', firm:'Ferme' };
+
+/* =========================================================
+   State
+   ========================================================= */
+let S;
+function seed(){
+  const inv = (id,client,amount,issued,due,x={}) => Object.assign({id:String(id),client,amount,issued,due,status:'upcoming',source:'Import CSV',reminders:[],events:[],paused:false,lastStep:-1,live:false},x);
+  const clients = [
+    {id:'c1',name:'Atelier Bernard',contact:'Thomas Bernard',email:'thomas@atelier-bernard.example',phone:'+33 6 39 98 00 01',scenario:null},
+    {id:'c2',name:'Agence Nova',contact:'Camille Roux',email:'compta@agence-nova.example',phone:'+33 6 39 98 00 02',scenario:null},
+    {id:'c3',name:'Studio Léa',contact:'Léa Martin',email:'lea@studio-lea.example',phone:'+33 6 39 98 00 03',scenario:null},
+    {id:'c4',name:'Maison Dorval',contact:'Paul Dorval',email:'facturation@maison-dorval.example',phone:'+33 6 39 98 00 04',scenario:'vip'},
+    {id:'c5',name:'Startup Orbit',contact:'Inès Carrel',email:'ines@orbit.example',phone:'+33 6 39 98 00 05',scenario:null}
+  ];
+  const invoices = [
+    inv(92,'Atelier Bernard',1600,-75,-45,{status:'paid',paidDay:-46}),
+    inv(94,'Agence Nova',750,-65,-35,{status:'paid',paidDay:-21,paidVia:'whatsapp'}),
+    inv(95,'Maison Dorval',2400,-55,-25,{status:'paid',paidDay:-27}),
+    inv(98,'Startup Orbit',900,-48,-18,{status:'paid',paidDay:-16,paidVia:'email'}),
+    inv(97,'Studio Léa',1200,-50,-20,{status:'overdue'}),
+    inv(99,'Agence Nova',1800,-40,-10,{status:'overdue'}),
+    inv(104,'Atelier Bernard',1500,-36,-6,{status:'overdue'}),
+    inv(106,'Maison Dorval',2200,-25,5),
+    inv(107,'Startup Orbit',900,-18,12),
+    inv(108,'Studio Léa',600,-10,20)
+  ];
+  invoices.forEach(i=>{
+    i.events.push({day:i.issued,tone:'blue',t:'Facture émise',s:'Importée depuis votre fichier CSV'});
+  });
+  const i94 = invoices[1], i98 = invoices[3];
+  i94.reminders.push({id:uid(),step:1,channel:'whatsapp',tone:'friendly',subject:'',text:'Relance WhatsApp envoyée',status:'sent',day:-30});
+  i94.events.push({day:-30,tone:'blue',t:'Relance envoyée par WhatsApp',s:'Ton amical'},{day:-21,tone:'green',t:'Facture payée',s:'Réglée suite à la relance par WhatsApp'});
+  i98.reminders.push({id:uid(),step:0,channel:'email',tone:'friendly',subject:'',text:'Relance e-mail envoyée',status:'sent',day:-17});
+  i98.events.push({day:-17,tone:'blue',t:'Relance envoyée par e-mail',s:'Ton amical'},{day:-16,tone:'green',t:'Facture payée',s:'Réglée suite à la relance par e-mail'});
+  invoices[0].events.push({day:-46,tone:'green',t:'Facture payée',s:'Réglée avant échéance'});
+  invoices[2].events.push({day:-27,tone:'green',t:'Facture payée',s:'Réglée avant échéance'});
+
+  return {
+    day:0, view:'dashboard',
+    user:{first:'Julien',last:'Martin',email:'julien@julienmartin.design',company:'Julien Martin Design'},
+    plan:'trial', manualValidation:true, payLink:true, bizDays:true, window:'9h – 18h',
+    weeklyRecap:true, payAlerts:true,
+    scenarios:[
+      {id:'std',name:'Standard — freelance',steps:[
+        {delay:3,channel:'email',tone:'friendly',on:true,custom:''},
+        {delay:8,channel:'whatsapp',tone:'friendly',on:true,custom:''},
+        {delay:15,channel:'email',tone:'firm',on:true,custom:''}]},
+      {id:'vip',name:'Clients clés — ton doux',steps:[
+        {delay:5,channel:'email',tone:'friendly',on:true,custom:''},
+        {delay:12,channel:'whatsapp',tone:'friendly',on:true,custom:''},
+        {delay:25,channel:'email',tone:'professional',on:true,custom:''}]},
+      {id:'big',name:'Gros montants — suivi renforcé',steps:[
+        {delay:1,channel:'email',tone:'professional',on:true,custom:''},
+        {delay:5,channel:'whatsapp',tone:'professional',on:true,custom:''},
+        {delay:10,channel:'email',tone:'firm',on:true,custom:''},
+        {delay:20,channel:'whatsapp',tone:'firm',on:true,custom:''}]}
+    ],
+    defaultScenario:'std',
+    clients, invoices,
+    integ:{pennylane:false,quickbooks:false,stripe:false,freebe:false,henrri:false},
+    hist:[1800,2400,1250,2950,3100,1500,2200,1300], histR:[0,0,0,400,900,0,750,0],
+    activity:[
+      {day:0,tone:'blue',icon:'upload',t:'10 factures importées depuis votre fichier CSV'},
+      {day:0,tone:'coral',icon:'alert',t:'3 factures en retard détectées — 4 500 €'},
+      {day:0,tone:'blue',icon:'send',t:'3 relances préparées, en attente de votre validation'}
+    ],
+    notifs:[
+      {day:0,unread:true,tone:'coral',icon:'alert',t:'3 relances sont prêtes à être validées',v:'validation'},
+      {day:0,unread:true,tone:'green',icon:'checkc',t:'Bienvenue sur PayRelance ! Votre essai gratuit de 14 jours est activé.',v:'dashboard'}
+    ],
+    flags:{scenario:false,first:false,tour:false},
+    sel:new Set(), f:{status:'all',q:'',sort:'due',dir:1,client:null},
+    edit:{scenarioId:'std',step:0,prev:'104'},
+    qEdit:null, referrals:[], freeMonths:0, refCode:'julien-m3x9',
+    checklistHidden:false, userMenu:false, notifMenu:false,
+    theme:'auto'
+  };
+}
+
+/* =========================================================
+   Domain helpers
+   ========================================================= */
+const inv$ = id => S.invoices.find(i=>i.id===String(id));
+const client$ = name => S.clients.find(c=>c.name===name);
+const od = i => Math.max(0, S.day - i.due);
+const effPlan = () => (S.plan==='trial' && trialLeft()<=0) ? 'solo' : S.plan;
+const trialLeft = () => 14 - S.day;
+const PLANS = {
+  solo:{name:'Solo',price:19,limit:30,who:'Indépendants & freelances',feat:['Jusqu’à 30 factures / mois','Relances par e-mail et WhatsApp','Page de paiement client intégrée','Validation avant envoi','Import CSV et synchro logiciel']},
+  pro:{name:'Pro',price:49,limit:150,who:'TPE & agences',feat:['Jusqu’à 150 factures / mois','Scénarios illimités par client','Mise en demeure par e-mail','Récap hebdomadaire de trésorerie','Support prioritaire']},
+  enterprise:{name:'Enterprise',price:119,limit:Infinity,who:'PME',feat:['Volume de factures illimité','Intégrations sur-mesure','Multi-utilisateurs','Support dédié','Accompagnement à la mise en place']}
+};
+const planLimit = () => effPlan()==='trial' ? 150 : PLANS[effPlan()].limit;
+const planLabel = () => S.plan==='trial' ? (trialLeft()>0?'Essai gratuit':'Essai terminé') : PLANS[S.plan].name;
+function canUse(ch){ return true; }   // V1 : e-mail et WhatsApp inclus dans toutes les offres
+function scenarioFor(i){
+  const c = client$(i.client);
+  const id = (c && c.scenario) || S.defaultScenario;
+  return S.scenarios.find(s=>s.id===id) || S.scenarios[0];
+}
+function payBase(){ return String(CFG.publicUrl || location.href).replace(/#.*$/,''); }
+function payLink(i){
+  if(CFG.payTpl) return CFG.payTpl.replace(/\{numero\}/g,encodeURIComponent(i.id)).replace(/\{montant\}/g,encodeURIComponent(i.amount)).replace(/\{client\}/g,encodeURIComponent(i.client));
+  const q = new URLSearchParams({n:i.id,m:String(i.amount),c:i.client,f:S.user.first+' '+S.user.last});
+  return payBase()+'#/pay?'+q.toString();
+}
+function firstName(i){ const c=client$(i.client); return c ? c.contact.split(' ')[0] : 'Madame, Monsieur'; }
+function meName(){ return S.user.first+' '+S.user.last; }
+
+/* ---------- message templates (V1 : e-mail + WhatsApp) ---------- */
+const TPL = {
+  friendly:{
+    email:{s:'Petit rappel — facture n°{numero}', b:'Bonjour {prenom},\n\nJ’espère que vous allez bien ! Je me permets de vous rappeler que la facture n°{numero} de {montant}, arrivée à échéance le {echeance}, ne semble pas encore réglée. Il s’agit sûrement d’un oubli 🙂\n\n{reglement}\n\nMerci beaucoup et belle journée,\n{moi}'},
+    whatsapp:{b:'Bonjour {prenom} 👋 C’est {moi}. Un petit rappel pour la facture n°{numero} ({montant}), échue le {echeance}. {reglement} 🙏'}
+  },
+  professional:{
+    email:{s:'Facture n°{numero} — échéance dépassée', b:'Bonjour {prenom},\n\nSauf erreur de notre part, la facture n°{numero} d’un montant de {montant}, échue le {echeance}, reste impayée à ce jour ({retard} jours de retard).\n\n{reglement}\n\nSi le paiement a déjà été effectué, merci de ne pas tenir compte de ce message.\n\nCordialement,\n{moi}'},
+    whatsapp:{b:'Bonjour {prenom}, la facture n°{numero} ({montant}), échue le {echeance}, reste impayée à ce jour ({retard} jours). {reglement} Merci d’avance.'}
+  },
+  firm:{
+    email:{s:'Dernier rappel — facture n°{numero} impayée', b:'Bonjour {prenom},\n\nMalgré mes précédents rappels, la facture n°{numero} de {montant} (échue depuis {retard} jours) demeure impayée.\n\nMerci de régulariser cette situation sous 48 heures. {reglement}\n\nÀ défaut, je serai contraint d’engager la procédure de recouvrement prévue par mes conditions de règlement, incluant les pénalités de retard et l’indemnité forfaitaire de 40 € pour frais de recouvrement.\n\n{moi}'},
+    whatsapp:{b:'Bonjour {prenom}, dernier rappel concernant la facture n°{numero} ({montant}), impayée depuis {retard} jours. Merci de la régler sous 48 h. {reglement}'}
+  }
+};
+function baseTpl(channel,tone){ return ((TPL[tone]||TPL.friendly)[channel]) || TPL.friendly.email; }
+function fill(tpl,i){
+  const reg = S.payLink ? `Vous pouvez la régler en 1 clic : ${payLink(i)}` : 'Merci de procéder au règlement par virement.';
+  const map = {prenom:firstName(i),numero:i.id,montant:eur(i.amount),echeance:fmtDM(i.due),retard:Math.max(od(i),1),reglement:reg,moi:meName()};
+  return String(tpl).replace(/\{(\w+)\}/g,(m,k)=> k in map ? map[k] : m);
+}
+function buildMessage(i,channel,tone,custom){
+  const t = baseTpl(channel,tone);
+  return { subject: t.s ? fill(t.s,i) : '', text: fill(custom || t.b, i) };
+}
+function previewHTML(channel,m,i){
+  const linkify = txt => esc(txt).replace(/(https?:\/\/[^\s<]+)/g,'<span class="pv-link">$1</span>');
+  const c = client$(i.client);
+  if(channel==='email') return `<div class="pv-mail"><div class="pv-h">À : ${esc(c?c.email:'')}<b>${esc(m.subject)}</b></div><div class="pv-b">${linkify(m.text)}</div></div>`;
+  return `<div style="display:flex;flex-direction:column;gap:6px"><div class="sub">WhatsApp · ${esc(c?c.phone:'')}</div><div class="bubble wa">${linkify(m.text)}<span class="meta">WhatsApp</span></div></div>`;
+}
+
+/* ---------- status helpers ---------- */
+function statusOf(i){
+  if(i.status==='paid') return {k:'paid',cls:'b-green',label:'Payée'};
+  if(i.status==='collection') return {k:'collection',cls:'b-gray',label:'En recouvrement'};
+  if(i.status==='overdue'){
+    const q = i.reminders.some(r=>r.status==='queued'||r.status==='ready');
+    return {k:'overdue',cls:'b-red',label:`En retard · ${od(i)} j`, sub: q?'Relance à valider': (i.reminders.some(r=>r.status==='sent')?'Relancée':'') };
+  }
+  const d = i.due - S.day;
+  return {k:'upcoming',cls:'b-blue',label: d===0?'Échéance aujourd’hui':`Échéance dans ${d} j`};
+}
+function queued(){
+  const out=[];
+  S.invoices.forEach(i=>i.reminders.forEach(r=>{ if(r.status==='queued') out.push({inv:i,r}); }));
+  return out.sort((a,b)=>od(b.inv)-od(a.inv));
+}
+function readyList(){
+  const out=[];
+  S.invoices.forEach(i=>i.reminders.forEach(r=>{ if(r.status==='ready') out.push({inv:i,r}); }));
+  return out;
+}
+function logActivity(tone,icon,t){ S.activity.unshift({day:S.day,tone,icon,t}); S.activity = S.activity.slice(0,40); }
+function notify(tone,icon,t,v){ S.notifs.unshift({day:S.day,unread:true,tone,icon,t,v:v||null}); S.notifs = S.notifs.slice(0,30); }
+function toneColors(t){ return t==='green'?['var(--green-soft)','var(--green-ink)']: t==='coral'?['var(--coral-soft)','var(--coral-ink)']: ['var(--brand-soft)','var(--brand)']; }
+
+/* ---------- engine: one reminder at a time, sequential, min 3 days between ---------- */
+function runEngine(){
+  let created=0;
+  S.invoices.forEach(i=>{
+    if(i.status!=='overdue' || i.paused) return;
+    if(i.reminders.some(r=>r.status==='queued'||r.status==='ready')) return;
+    const sc = scenarioFor(i);
+    const last = i.reminders.filter(r=>r.status==='sent').reduce((m,r)=>Math.max(m,r.day),-9999);
+    if(last>-9999 && S.day-last<3) return;
+    const o = od(i);
+    let cand=-1;
+    sc.steps.forEach((st,idx)=>{ if(st.on && st.delay<=o && idx>i.lastStep) cand=idx; });
+    if(cand<0) return;
+    const st = sc.steps[cand];
+    const ch = canUse(st.channel) ? st.channel : 'email';
+    const m = buildMessage(i,ch,st.tone,ch===st.channel?st.custom:'');
+    const r = {id:uid(),step:cand,channel:ch,tone:st.tone,subject:m.subject,text:m.text,status:'queued',day:S.day,fallback:ch!==st.channel};
+    if(S.manualValidation){
+      i.reminders.push(r); created++;
+    } else {
+      r.status='sent'; i.reminders.push(r); i.lastStep=cand;
+      i.events.push({day:S.day,tone:'blue',t:`Relance envoyée par ${CH[ch].label}`,s:`Envoi automatique · ${TONES[st.tone]}`});
+      logActivity('blue',CH[ch].icon,`Relance envoyée automatiquement à ${client$(i.client)?.contact||i.client} (${CH[ch].label}) — facture n°${i.id}`);
+      S.flags.first=true;
+    }
+  });
+  if(created>0){
+    notify('coral','alert',`${created} ${plural(created,'relance est prête','relances sont prêtes')} à être ${plural(created,'validée','validées')}`,'validation');
+  }
+  return created;
+}
+function sendReminder(i,r,mode){
+  r.status='sent'; r.day=S.day; r.mode=mode; delete r.error;
+  i.lastStep = Math.max(i.lastStep, r.step!=null ? r.step : -1);
+  const c = client$(i.client), who = c ? c.contact : i.client;
+  const lab = {real:'Envoi réel',sim:'Envoi simulé (aucun message réellement envoyé)',wa:'Ouvert dans WhatsApp'}[mode] || '';
+  const title = (mode==='sim' ? (r.channel==='email'?'E-mail simulé':'WhatsApp simulé') : `Relance envoyée par ${CH[r.channel].label}`);
+  i.events.push({day:S.day,tone:'blue',t:title,s:`${lab} · ${TONES[r.tone]||'Message personnalisé'} · à ${who}`});
+  logActivity('blue',CH[r.channel].icon,`${title} — ${who}, facture n°${i.id} (${eur(i.amount)})${mode==='sim'?' — simulation':''}`);
+  S.flags.first=true;
+}
+/* Envoie (vraiment) un e-mail, prépare un WhatsApp, ou simule pour les clients fictifs */
+async function deliver(i,r){
+  const c = client$(i.client);
+  if(r.channel==='whatsapp'){
+    if(!c || !normPhone(c.phone)){ toast('Numéro WhatsApp manquant ou invalide — corrigez-le dans Clients › Modifier.','warn'); return 'error'; }
+    if(isFictionalPhone(c.phone)){ sendReminder(i,r,'sim'); return 'sent'; }
+    r.status='ready'; return 'ready';
+  }
+  if(!c || !/^\S+@\S+\.\S+$/.test(c.email||'')){ toast('Adresse e-mail manquante ou invalide — corrigez-la dans Clients › Modifier.','warn'); return 'error'; }
+  if(emailReady() && !isFictionalEmail(c.email)){
+    try{ await emailjsSend(c.email,c.contact,r.subject,r.text,{invoice_number:i.id,amount:eur(i.amount),pay_link:payLink(i)}); }
+    catch(e){ r.error=e.message; toast('Échec de l’envoi e-mail : '+e.message+'.','warn'); return 'error'; }
+    sendReminder(i,r,'real'); return 'sent';
+  }
+  sendReminder(i,r,'sim'); return 'sent';
+}
+function sentToast(i,r){
+  const c = client$(i.client);
+  if(r.channel==='email'){
+    if(r.mode==='real') return `E-mail envoyé à ${c.email}.`;
+    if(c && isFictionalEmail(c.email) && emailReady()) return 'Client fictif de la démo : e-mail simulé (aucun envoi réel à une adresse fictive).';
+    return 'E-mail simulé — activez l’envoi réel dans Intégrations › E-mail.';
+  }
+  return r.mode==='sim' ? 'Numéro fictif de la démo : message WhatsApp simulé.' : 'Message WhatsApp ouvert : appuyez sur Envoyer dans WhatsApp.';
+}
+function markPaid(i,attributed){
+  const lastSent = i.reminders.filter(r=>r.status==='sent').slice(-1)[0];
+  i.reminders.forEach(r=>{ if(r.status==='queued'||r.status==='ready') r.status='cancelled'; });
+  i.status='paid'; i.paidDay=S.day; i.live=true;
+  if(attributed && lastSent) i.paidVia = lastSent.channel;
+  i.events.push({day:S.day,tone:'green',t:'Facture payée',s: attributed && lastSent ? `Réglée suite à la relance par ${CH[lastSent.channel].label}` : (attributed?'Paiement reçu via le lien de paiement':'Marquée comme payée')});
+  const msg = attributed && lastSent ? `Facture de ${eur(i.amount)} réglée suite à la relance par ${CH[lastSent.channel].label}` : (attributed?`Facture n°${i.id} de ${eur(i.amount)} réglée via le lien de paiement`:`Facture n°${i.id} de ${eur(i.amount)} marquée comme payée`);
+  logActivity('green','checkc',msg+` — ${i.client}`);
+  if(S.payAlerts) notify('green','checkc',msg+` — ${i.client}`,'factures');
+  return msg;
+}
+
+/* =========================================================
+   Stats
+   ========================================================= */
+function stats(){
+  const sum = a => a.reduce((s,i)=>s+i.amount,0);
+  const over = S.invoices.filter(i=>i.status==='overdue');
+  const up = S.invoices.filter(i=>i.status==='upcoming');
+  const paid = S.invoices.filter(i=>i.status==='paid');
+  const rec = paid.filter(i=>i.paidVia && i.paidDay>=S.day-30);
+  const week = paid.filter(i=>i.paidVia && i.paidDay>=S.day-6);
+  const dso = paid.length ? Math.round(paid.reduce((s,i)=>s+(i.paidDay-i.issued),0)/paid.length) : 0;
+  const coll = S.invoices.filter(i=>i.status==='collection');
+  return {over,up,paid,rec,week,coll, overSum:sum(over), upSum:sum(up.filter(i=>i.due-S.day<=30)), recSum:sum(rec), weekSum:sum(week), dso, collSum:sum(coll)};
+}
+
+/* =========================================================
+   Charts
+   ========================================================= */
+function cashChart(){
+  const n=8, vals=[], rel=[];
+  for(let w=0;w<n;w++){ vals.push(S.hist[w]); rel.push(S.histR[w]); }
+  S.invoices.filter(i=>i.live && i.status==='paid').forEach(i=>{
+    const w = n-1-Math.min(n-1,Math.floor((S.day-i.paidDay)/7));
+    vals[w]+=i.amount; if(i.paidVia) rel[w]+=i.amount;
+  });
+  const max = Math.max(1000,...vals)*1.15;
+  const W=620,H=230,L=44,B=28,T=10,bw=44, gap=(W-L-10-n*bw)/(n-1);
+  let g='';
+  for(let k=0;k<=4;k++){
+    const y = T+(H-T-B)*(1-k/4), v = Math.round(max*k/4/100)*100;
+    g+=`<line x1="${L}" x2="${W-6}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--dim)">${v>=1000?(v/1000).toFixed(1).replace('.0','')+'k':v}</text>`;
+  }
+  let bars='';
+  vals.forEach((v,w)=>{
+    const x=L+w*(bw+gap), h=(H-T-B)*v/max, hr=(H-T-B)*rel[w]/max, y=H-B-h;
+    const lab = w===n-1?'Cette sem.':'S-'+(n-1-w);
+    bars+=`<g><title>${lab} — ${eur(v)} encaissés${rel[w]?`, dont ${eur(rel[w])} grâce aux relances`:''}</title>
+      <rect x="${x}" y="${y}" width="${bw}" height="${Math.max(h,0)}" rx="6" fill="var(--brand-btn)" opacity=".88"/>
+      ${rel[w]>0?`<rect x="${x}" y="${H-B-hr}" width="${bw}" height="${hr}" rx="${hr>8?6:3}" fill="var(--green)"/>`:''}
+      <text x="${x+bw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--dim)">${lab}</text></g>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Encaissements par semaine">${g}${bars}</svg>`;
+}
+function agingBlock(){
+  const o = S.invoices.filter(i=>i.status==='overdue');
+  const b = [['1–7 j',1,7],['8–15 j',8,15],['16–30 j',16,30],['30 j et +',31,9999]].map(([l,a,z])=>({l,sum:o.filter(i=>od(i)>=a&&od(i)<=z).reduce((s,i)=>s+i.amount,0)}));
+  const max = Math.max(1,...b.map(x=>x.sum));
+  return b.map(x=>`<div class="aging-row"><span class="al">${x.l}</span><div class="ab"><i style="width:${x.sum?Math.max(6,x.sum/max*100):0}%"></i></div><span class="av mono">${eur(x.sum)}</span></div>`).join('');
+}
+
+/* =========================================================
+   Views
+   ========================================================= */
+const NAV = [
+  {id:'dashboard',l:'Tableau de bord',i:'grid'},
+  {id:'factures',l:'Factures',i:'file'},
+  {id:'validation',l:'À valider',i:'checkc',badge:true},
+  {id:'relances',l:'Scénarios de relance',i:'send'},
+  {id:'clients',l:'Clients',i:'users'},
+  {id:'recouvrement',l:'Recouvrement',i:'scale'},
+  {sep:'Configuration'},
+  {id:'integrations',l:'Intégrations',i:'link'},
+  {id:'parrainage',l:'Parrainage',i:'gift'},
+  {id:'abonnement',l:'Abonnement',i:'card'}
+];
+function renderSidebar(){
+  const q = queued().length;
+  const tl = trialLeft();
+  const trial = S.plan==='trial' ? `<div class="trial-card"><b>${tl>0?`Essai gratuit — ${tl} ${plural(tl,'jour')} restant${tl>1?'s':''}`:'Essai terminé'}</b><p>${tl>0?'Toutes les fonctionnalités sont ouvertes, sans carte bancaire.':'Choisissez une offre pour continuer à relancer.'}</p><div class="bar" style="margin-bottom:12px"><i style="width:${Math.max(0,Math.min(100,(14-Math.max(tl,0))/14*100))}%"></i></div><button class="btn btn-primary btn-sm" style="width:100%" data-a="go" data-v="abonnement">Choisir une offre</button></div>` : `<div class="trial-card"><b>Offre ${PLANS[S.plan].name}</b><p>${eur(PLANS[S.plan].price)} / mois — sans engagement.</p><button class="btn btn-ghost btn-sm" style="width:100%" data-a="go" data-v="abonnement">Gérer l’abonnement</button></div>`;
+  $('#sidebar').innerHTML = `<div class="brand">${LOGO(34)}<div>PayRelance<small>Relances d’impayés automatisées</small></div></div><nav class="nav">${NAV.map(n=>n.sep?`<div class="nav-label">${n.sep}</div>`:`<button class="nav-item ${S.view===n.id?'active':''}" data-a="go" data-v="${n.id}">${ic(n.i,18)}<span>${n.l}</span>${n.badge&&q?`<span class="badge-n">${q}</span>`:''}</button>`).join('')}</nav>${trial}`;
+}
+function renderTop(){
+  const rel = S.day===0?'Aujourd’hui':`J+${S.day}`;
+  $('#datechip').textContent = `${rel} · ${fmtD(S.day)}`;
+  $('#avatar').textContent = S.user.first.charAt(0).toUpperCase();
+  $('#uname').textContent = S.user.first;
+  const un = S.notifs.filter(n=>n.unread).length;
+  $('#notifdot').style.display = un ? 'block':'none';
+}
+
+const emailChip = () => emailReady()
+  ? `<span class="badge b-green">${ic('check',12)}E-mail : envoi réel actif</span>`
+  : `<button class="badge b-amber" data-a="go" data-v="integrations" style="cursor:pointer" title="Configurer l’envoi réel">E-mail : mode simulation — activer l’envoi réel</button>`;
+function realTestBanner(){
+  if(S.testDone) return '';
+  return `<div class="banner green"><div class="bi" style="color:var(--green-ink)">${ic('send',20)}</div><div class="bt"><b>Testez PayRelance en conditions réelles</b><span>Entrez votre e-mail (et votre numéro WhatsApp) : vous recevrez une vraie relance avec un vrai lien de paiement.</span><div style="margin-top:6px">${emailChip()}</div></div><button class="btn btn-green" data-a="real-test">${ic('send',15)}Recevoir une vraie relance</button></div>`;
+}
+
+/* ----------------------- Dashboard ----------------------- */
+function vDashboard(){
+  const st = stats(), q = queued();
+  const dsoDelta = Math.round((st.dso-55)/55*100);
+  const checks = [
+    {t:'Importer vos factures',d:`${S.invoices.length} factures suivies`,done:true},
+    {t:'Connecter votre logiciel de facturation',d:'Pennylane, QuickBooks, Stripe, Freebe, Henrri…',done:Object.values(S.integ).some(Boolean),a:'integrations'},
+    {t:'Choisir le ton de vos relances',d:'Vérifiez le scénario J+3 / J+8 / J+15',done:S.flags.scenario,a:'relances'},
+    {t:'Valider votre première relance',d:'Rien ne part sans votre accord',done:S.flags.first,a:'validation'}
+  ];
+  const doneN = checks.filter(c=>c.done).length;
+  const todo = st.over.slice().sort((a,b)=>od(b)-od(a)).slice(0,5);
+  const feed = S.activity.slice(0,7);
+  const ago = d => { const k=S.day-d; return k<=0?'Aujourd’hui':k===1?'Hier':`Il y a ${k} j`; };
+  const banner = q.length ? `<div class="banner coral"><div class="bi" style="color:var(--coral-ink)">${ic('zap',20)}</div><div class="bt"><b>${q.length} ${plural(q.length,'relance prête','relances prêtes')} pour ${eur(q.reduce((s,x)=>s+x.inv.amount,0))} d’impayés</b><span>PayRelance a détecté les retards et préparé les messages. Aucun message ne part sans votre validation.</span></div><div class="actions"><button class="btn btn-ghost btn-sm" data-a="go" data-v="validation">Voir les relances</button><button class="btn btn-green btn-sm" data-a="approve-all">${ic('check',15)}Tout valider en 1 clic</button></div></div>` : '';
+  return `
+  <div class="page-head"><div><h1>Bonjour ${esc(S.user.first)} 👋</h1><p>Voici l’état de votre trésorerie client au ${fmtDL(S.day)}.</p></div>
+    <div class="actions"><button class="btn btn-ghost" data-a="go" data-v="relances">${ic('send',16)}Scénarios</button><button class="btn btn-primary" data-a="import">${ic('plus',16)}Ajouter / importer des factures</button></div></div>
+  ${banner}${realTestBanner()}
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card kpi"><div class="lab"><span class="ico" style="background:var(--coral-soft);color:var(--coral-ink)">${ic('alert',16)}</span>Impayés en retard</div><div class="val mono">${eur(st.overSum)}</div><div class="note"><span class="badge b-red">${st.over.length} ${plural(st.over.length,'facture')}</span>${q.length?`${q.length} à relancer`:'toutes relancées'}</div></div>
+    <div class="card kpi"><div class="lab"><span class="ico" style="background:var(--brand-soft);color:var(--brand)">${ic('clock',16)}</span>À encaisser sous 30 jours</div><div class="val mono">${eur(st.upSum)}</div><div class="note">${st.up.filter(i=>i.due-S.day<=30).length} échéances à venir</div></div>
+    <div class="card kpi"><div class="lab"><span class="ico" style="background:var(--green-soft);color:var(--green-ink)">${ic('trend',16)}</span>Récupéré grâce aux relances</div><div class="val mono">${eur(st.recSum)}</div><div class="note">sur 30 jours · ${st.rec.length} ${plural(st.rec.length,'facture')}</div></div>
+    <div class="card kpi"><div class="lab"><span class="ico" style="background:var(--brand-soft);color:var(--brand)">${ic('euro',16)}</span>Délai moyen de paiement</div><div class="val mono">${st.dso} j</div><div class="note"><span class="badge ${dsoDelta<=0?'b-green':'b-red'}">${dsoDelta>0?'+':''}${dsoDelta} %</span>vs 55 j avant PayRelance</div></div>
+  </div>
+  <div class="grid g-main">
+    <div class="grid" style="gap:16px">
+      <div class="card card-pad">
+        <div class="card-head"><div><h3>Encaissements par semaine</h3><div class="sub">8 dernières semaines</div></div><div class="chart-legend"><span><i style="background:var(--brand-btn)"></i>Encaissé</span><span><i style="background:var(--green)"></i>Dont grâce aux relances</span></div></div>
+        ${cashChart()}
+      </div>
+      <div class="card">
+        <div class="card-head" style="padding:20px 20px 0"><div><h3>Factures à traiter</h3><div class="sub">Les retards les plus anciens en premier</div></div><button class="btn btn-ghost btn-sm" data-a="go" data-v="factures">Tout voir</button></div>
+        ${todo.length?`<div class="tablewrap"><table><thead><tr><th>Client</th><th>Facture</th><th class="num">Montant</th><th>Statut</th><th></th></tr></thead><tbody>${todo.map(i=>{const s=statusOf(i);return `<tr class="clickable" data-a="open-inv" data-id="${i.id}"><td><div class="cell-main">${esc(i.client)}</div><div class="cell-sub">${esc(client$(i.client)?.contact||'')}</div></td><td>n°${i.id}</td><td class="num mono"><b>${eur(i.amount)}</b></td><td><span class="badge ${s.cls}">${s.label}</span>${s.sub?`<div class="cell-sub" style="margin-top:3px">${s.sub}</div>`:''}</td><td class="num"><button class="btn btn-coral btn-sm" data-a="compose" data-id="${i.id}">${ic('send',13)}Relancer</button></td></tr>`;}).join('')}</tbody></table></div>`:`<div class="empty"><div class="ei">${ic('check',26)}</div><b>Aucun impayé en retard 🎉</b><p>Tout est à jour. PayRelance surveille vos prochaines échéances.</p></div>`}
+      </div>
+    </div>
+    <div class="grid" style="gap:16px">
+      ${(!S.checklistHidden && doneN<checks.length)?`<div class="card card-pad"><div class="card-head" style="margin-bottom:6px"><h3>Premiers pas</h3><span class="sub">${doneN}/${checks.length}</span></div><div class="bar" style="margin-bottom:6px"><i style="width:${doneN/checks.length*100}%"></i></div>${checks.map(c=>`<div class="check ${c.done?'done':''}"><div class="cb">${c.done?ic('check',13):''}</div><div style="flex:1"><b>${c.t}</b><span>${c.d}</span></div>${!c.done&&c.a?`<button class="btn btn-ghost btn-sm" data-a="go" data-v="${c.a}">Ouvrir</button>`:''}</div>`).join('')}</div>`:''}
+      <div class="card card-pad" style="background:linear-gradient(160deg,var(--green-soft),var(--surface))">
+        <div class="card-head" style="margin-bottom:6px"><h3>Récap de la semaine</h3>${ic('trend',18,'style="color:var(--green-ink)"')}</div>
+        ${st.weekSum>0?`<div style="font-family:var(--font-d);font-size:26px;font-weight:800" class="mono">${eur(st.weekSum)}</div><p class="sub" style="margin-top:2px">Cette semaine, PayRelance a récupéré ${eur(st.weekSum)} pour vous.</p>`:`<p class="sub">Aucun paiement récupéré cette semaine pour le moment. ${q.length?`<b>${q.length} ${plural(q.length,'relance attend','relances attendent')}</b> votre validation.`:'Les prochaines relances partiront selon vos scénarios.'}</p>`}
+      </div>
+      <div class="card card-pad"><div class="card-head"><h3>Répartition des retards</h3></div>${agingBlock()}</div>
+      <div class="card card-pad"><div class="card-head" style="margin-bottom:4px"><h3>Activité récente</h3></div><div class="feed">${feed.map(a=>{const [bg,fg]=toneColors(a.tone);return `<div class="feed-item"><div class="fi" style="background:${bg};color:${fg}">${ic(a.icon||'check',15)}</div><div><div>${esc(a.t)}</div><small>${ago(a.day)}</small></div></div>`;}).join('')}</div></div>
+    </div>
+  </div>
+  <p class="sub" style="margin-top:22px;text-align:center">Plateforme de démonstration — les données affichées sont des exemples fictifs.</p>`;
+}
+
+/* ----------------------- Invoices ----------------------- */
+function filteredInvoices(){
+  const f = S.f; let a = S.invoices.slice();
+  if(f.status==='overdue') a=a.filter(i=>i.status==='overdue');
+  else if(f.status==='upcoming') a=a.filter(i=>i.status==='upcoming');
+  else if(f.status==='paid') a=a.filter(i=>i.status==='paid');
+  else if(f.status==='collection') a=a.filter(i=>i.status==='collection');
+  if(f.client) a=a.filter(i=>i.client===f.client);
+  if(f.q){ const q=f.q.toLowerCase(); a=a.filter(i=>(i.client+' '+i.id+' '+(client$(i.client)?.contact||'')+' '+i.amount).toLowerCase().includes(q)); }
+  const k=f.sort, d=f.dir;
+  a.sort((x,y)=>{
+    let r=0;
+    if(k==='due') r=x.due-y.due; else if(k==='amount') r=x.amount-y.amount; else if(k==='client') r=x.client.localeCompare(y.client); else if(k==='id') r=Number(x.id)-Number(y.id);
+    return r*d;
+  });
+  return a;
+}
+function invRow(i){
+  const s = statusOf(i); const last = i.reminders.filter(r=>r.status==='sent').slice(-1)[0];
+  const c = client$(i.client);
+  return `<tr class="clickable" data-a="open-inv" data-id="${i.id}">
+    <td><input type="checkbox" data-a="sel" data-id="${i.id}" ${S.sel.has(i.id)?'checked':''} ${i.status==='overdue'?'':'disabled'} aria-label="Sélectionner"></td>
+    <td class="mono">n°${i.id}</td>
+    <td><div class="cell-main">${esc(i.client)}</div><div class="cell-sub">${esc(c?c.contact:'')}</div></td>
+    <td class="num mono"><b>${eur(i.amount)}</b></td>
+    <td>${fmtD(i.due)}</td>
+    <td><span class="badge ${s.cls}">${s.label}</span>${s.sub?`<div class="cell-sub" style="margin-top:3px">${s.sub}</div>`:''}</td>
+    <td class="hide-m">${last?`<span class="ch"><span class="ch-ico">${ic(CH[last.channel].icon,14)}</span>${CH[last.channel].label}<span class="cell-sub">· ${fmtD(last.day)}</span></span>`:'<span class="cell-sub">—</span>'}</td>
+    <td class="num">${i.status==='overdue'?`<button class="btn btn-coral btn-sm" data-a="compose" data-id="${i.id}">${ic('send',13)}Relancer</button>`:`<button class="btn btn-ghost btn-sm" data-a="open-inv" data-id="${i.id}">Détail</button>`}</td></tr>`;
+}
+function invTableInner(){
+  const a = filteredInvoices();
+  const arrow = k => S.f.sort===k ? (S.f.dir===1?' ↑':' ↓') : '';
+  if(!a.length) return `<div class="empty"><div class="ei">${ic('search',24)}</div><b>Aucune facture trouvée</b><p>Modifiez vos filtres ou votre recherche.</p></div>`;
+  return `<div class="tablewrap"><table><thead><tr><th style="width:34px"></th><th class="sortable" data-a="sort" data-v="id">N°${arrow('id')}</th><th class="sortable" data-a="sort" data-v="client">Client${arrow('client')}</th><th class="sortable num" data-a="sort" data-v="amount">Montant${arrow('amount')}</th><th class="sortable" data-a="sort" data-v="due">Échéance${arrow('due')}</th><th>Statut</th><th class="hide-m">Dernière relance</th><th></th></tr></thead><tbody>${a.map(invRow).join('')}</tbody></table></div>`;
+}
+function bulkBar(){
+  const n=S.sel.size;
+  return n?`<div class="banner blue" style="margin:12px 16px 0"><div class="bt"><b>${n} ${plural(n,'facture sélectionnée','factures sélectionnées')}</b></div><div class="actions"><button class="btn btn-ghost btn-sm" data-a="clear-sel">Annuler</button><button class="btn btn-primary btn-sm" data-a="bulk-queue">${ic('send',14)}Préparer les relances</button></div></div>`:'';
+}
+function vFactures(){
+  const c = k => S.invoices.filter(i=>i.status===k).length;
+  const pill = (k,l,n) => `<button class="pill ${S.f.status===k?'on':''}" data-a="filter" data-v="${k}">${l}<i>${n}</i></button>`;
+  return `<div class="page-head"><div><h1>Factures</h1><p>Toutes vos factures suivies, synchronisées ou importées.</p></div><div class="actions"><button class="btn btn-primary" data-a="import">${ic('plus',16)}Ajouter / importer</button></div></div>
+  ${S.f.client?`<div class="banner blue" style="padding:10px 16px"><div class="bt"><b>Filtré sur le client : ${esc(S.f.client)}</b></div><button class="btn btn-ghost btn-sm" data-a="clear-client">Retirer le filtre</button></div>`:''}
+  <div class="card"><div class="toolbar"><div class="pills">${pill('all','Toutes',S.invoices.length)}${pill('overdue','En retard',c('overdue'))}${pill('upcoming','À venir',c('upcoming'))}${pill('paid','Payées',c('paid'))}</div><span class="sub">${S.invoices.length} / ${planLimit()===Infinity?'∞':planLimit()} factures ce mois</span></div><div id="bulk">${bulkBar()}</div><div id="invtable">${invTableInner()}</div></div>`;
+}
+
+/* ----------------------- Scénarios ----------------------- */
+function curScenario(){ return S.scenarios.find(s=>s.id===S.edit.scenarioId) || S.scenarios[0]; }
+function stepPreview(){
+  const sc = curScenario(), st = sc.steps[S.edit.step];
+  const i = inv$(S.edit.prev) || S.invoices.find(x=>x.status==='overdue') || S.invoices[0];
+  if(!st) return '<div class="sub">Ajoutez une étape pour voir l’aperçu.</div>';
+  const m = buildMessage(i,st.channel,st.tone,st.custom);
+  return previewHTML(st.channel,m,i);
+}
+function vRelances(){
+  const sc = curScenario();
+  const over = S.invoices.filter(i=>i.status==='overdue');
+  const prevList = over.length?over:S.invoices;
+  if(!prevList.some(i=>i.id===S.edit.prev)) S.edit.prev = prevList[0].id;
+  const prevOpts = prevList.map(i=>`<option value="${i.id}" ${i.id===S.edit.prev?'selected':''}>n°${i.id} — ${esc(i.client)} (${eur(i.amount)})</option>`).join('');
+  const st = sc.steps[S.edit.step];
+  return `<div class="page-head"><div><h1>Scénarios de relance</h1><p>Choisissez quand, comment et sur quel ton PayRelance relance vos clients.</p></div><div class="actions"><button class="btn btn-ghost" data-a="dup-scn">${ic('copy',15)}Dupliquer</button><button class="btn btn-green" data-a="save-scn">${ic('check',16)}Enregistrer le scénario</button></div></div>
+  <div class="reassure">${ic('shield',20)}<div>Aucun e-mail ou message WhatsApp ne sera envoyé à vos clients sans votre validation manuelle préalable${S.manualValidation?'':' <b>(désactivée actuellement)</b>'}.</div></div>
+  <div class="grid relgrid" id="relgrid">
+    <div>
+      <div class="card card-pad" style="margin-bottom:16px"><h3 style="margin-bottom:12px">Mes scénarios</h3>${S.scenarios.map(s=>`<button class="scn ${s.id===sc.id?'on':''}" data-a="pick-scn" data-id="${s.id}"><div class="sn"><b>${esc(s.name)}</b><span class="sub">${s.steps.filter(x=>x.on).length} étapes · J+${s.steps.filter(x=>x.on).map(x=>x.delay).join(' / J+')}</span></div>${s.id===S.defaultScenario?'<span class="badge b-green">Par défaut</span>':''}</button>`).join('')}${sc.id!==S.defaultScenario?`<button class="btn btn-ghost btn-sm" style="width:100%" data-a="default-scn">Définir comme scénario par défaut</button>`:''}</div>
+      <div class="card card-pad"><h3 style="margin-bottom:4px">Réglages d’envoi</h3>
+        <div class="setting"><div class="st"><b>Validation manuelle</b><span>Vous approuvez chaque relance avant envoi</span></div><label class="switch"><input type="checkbox" data-c="manual" ${S.manualValidation?'checked':''}><i></i></label></div>
+        <div class="setting"><div class="st"><b>Lien de paiement</b><span>CB, virement, prélèvement dans chaque message</span></div><label class="switch"><input type="checkbox" data-c="paylink" ${S.payLink?'checked':''}><i></i></label></div>
+        <div class="setting"><div class="st"><b>Jours ouvrés uniquement</b><span>Pas d’envoi le week-end</span></div><label class="switch"><input type="checkbox" data-c="biz" ${S.bizDays?'checked':''}><i></i></label></div>
+        <div class="setting"><div class="st"><b>Plage horaire</b><span>Heures d’envoi des messages</span></div><select data-c="window" style="height:34px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);padding:0 8px">${['9h – 12h','9h – 18h','Toute la journée'].map(w=>`<option ${w===S.window?'selected':''}>${w}</option>`).join('')}</select></div>
+        <div class="setting"><div class="st"><b>Arrêt dès paiement</b><span>Toujours actif — plus aucune relance une fois la facture réglée</span></div>${ic('lock',16,'style="color:var(--dim)"')}</div>
+      </div>
+    </div>
+    <div>
+      <div class="card card-pad" style="margin-bottom:16px">
+        <div class="card-head"><div><h3>${esc(sc.name)}</h3><div class="sub">Une étape est déclenchée à J+X jours après l’échéance</div></div><button class="btn btn-ghost btn-sm" data-a="add-step">${ic('plus',14)}Ajouter une étape</button></div>
+        <div class="steps">${sc.steps.map((s,idx)=>{const locked=!canUse(s.channel);return `<div class="step ${idx===S.edit.step?'sel':''} ${s.on?'':'off'}" data-a="pick-step" data-id="${idx}">
+          <div class="sidx">${idx+1}</div>
+          <div class="dayin" title="Délai après l’échéance">J+<input type="number" min="0" max="90" value="${s.delay}" data-i="step-delay" data-id="${idx}" aria-label="Délai en jours"></div>
+          <select data-c="step-channel" data-id="${idx}" aria-label="Canal">${Object.keys(CH).map(k=>`<option value="${k}" ${k===s.channel?'selected':''}>${CH[k].label}${!canUse(k)?' 🔒':''}</option>`).join('')}</select>
+          <select data-c="step-tone" data-id="${idx}" aria-label="Ton" ${s.channel==='letter'?'disabled':''}>${Object.keys(TONES).map(k=>`<option value="${k}" ${k===s.tone?'selected':''}>${TONES[k]}</option>`).join('')}</select>
+          <label class="switch" title="Activer l’étape"><input type="checkbox" data-c="step-on" data-id="${idx}" ${s.on?'checked':''}><i></i></label>
+          <button class="x" data-a="del-step" data-id="${idx}" aria-label="Supprimer l’étape">${ic('trash',16)}</button>
+          ${locked?`<div class="sub" style="grid-column:1/-1;color:var(--amber-ink)">${ic('lock',12)} Ce canal nécessite l’offre Pro — l’e-mail sera utilisé à la place.</div>`:''}</div>`;}).join('')}</div>
+      </div>
+      <div class="card card-pad">
+        <div class="card-head"><div><h3>Aperçu du message — étape ${S.edit.step+1}</h3><div class="sub">Tel que le verra votre client</div></div>
+          <select data-c="prev-inv" style="height:34px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);padding:0 8px;max-width:240px">${prevOpts}</select></div>
+        <div class="preview" id="prev-box">${stepPreview()}</div>
+        ${st?`<div class="field" style="margin-top:14px;margin-bottom:0"><label>Personnaliser le texte (optionnel)</label><div class="chips">${['{prenom}','{numero}','{montant}','{echeance}','{retard}','{reglement}','{moi}'].map(c=>`<button class="chip" data-a="ins-var" data-v="${c}">${c}</button>`).join('')}</div><textarea id="custom-txt" data-i="step-custom" placeholder="Laissez vide pour utiliser le modèle ${esc(TONES[st.tone])}. Utilisez les variables ci-dessus.">${esc(st.custom||'')}</textarea><div style="margin-top:8px" class="actions"><button class="btn btn-ghost btn-sm" data-a="load-tpl">Charger le modèle dans l’éditeur</button>${st.custom?`<button class="btn btn-ghost btn-sm" data-a="reset-tpl">Revenir au modèle d’origine</button>`:''}</div></div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ----------------------- Validation ----------------------- */
+function vValidation(){
+  const q = queued(), ready = readyList();
+  const waSection = ready.length ? `<h3 style="margin:24px 0 12px">Prêts à envoyer sur WhatsApp</h3><p class="sub" style="margin:-6px 0 12px">Approuvés : un dernier clic dans WhatsApp (le message s’ouvre déjà rédigé, lien de paiement inclus).</p>` + ready.map(({inv:i,r})=>{
+    const c = client$(i.client); const url = c && normPhone(c.phone) ? waUrl(c.phone,r.text) : '#';
+    return `<div class="card qcard"><div class="qhead"><div class="ch-ico" style="width:38px;height:38px;border-radius:11px">${ic('wa',18)}</div><div class="qt"><b>${esc(i.client)} — facture n°${i.id}</b><div class="sub">${esc(c?c.contact:'')} · ${eur(i.amount)} · ${esc(c?c.phone:'')}</div></div><span class="badge b-green">Approuvé</span></div><div class="preview">${previewHTML('whatsapp',{text:r.text},i)}</div><div class="actions" style="margin-top:14px;justify-content:flex-end"><button class="btn btn-ghost" data-a="wa-cancel" data-inv="${i.id}" data-id="${r.id}">Annuler</button><a class="btn btn-green" href="${esc(url)}" target="_blank" rel="noopener" data-a="wa-sent" data-inv="${i.id}" data-id="${r.id}">${ic('wa',15)}Ouvrir WhatsApp et envoyer</a></div></div>`;
+  }).join('') : '';
+  const cards = q.map(({inv:i,r})=>{
+    const sc = scenarioFor(i); const c = client$(i.client); const editing = S.qEdit===r.id;
+    const stp = r.step!=null ? sc.steps[r.step] : null;
+    return `<div class="card qcard"><div class="qhead"><div class="ch-ico" style="width:38px;height:38px;border-radius:11px">${ic(CH[r.channel].icon,18)}</div><div class="qt"><b>${esc(i.client)} — facture n°${i.id}</b><div class="sub">${esc(c?c.contact:'')} · ${eur(i.amount)} · ${od(i)} jours de retard</div></div><span class="badge b-blue">${r.step!=null?`Étape ${r.step+1} · J+${stp?stp.delay:'?'} · `:'Manuelle · '}${CH[r.channel].label}</span><span class="badge b-gray">${TONES[r.tone]||'Personnalisé'}</span></div>
+      ${r.error?`<div class="sub" style="color:var(--coral-ink);margin-bottom:8px">${ic('alert',12)} Dernier envoi en échec : ${esc(r.error)}</div>`:''}
+      ${editing?`<div class="field" style="margin-bottom:10px">${r.channel==='email'?`<label>Objet</label><input id="q-sub-${r.id}" value="${esc(r.subject)}" style="margin-bottom:8px">`:''}<label>Message</label><textarea id="q-txt-${r.id}" style="min-height:150px">${esc(r.text)}</textarea></div>`:`<div class="preview">${previewHTML(r.channel,{subject:r.subject,text:r.text},i)}</div>`}
+      <div class="actions" style="margin-top:14px;justify-content:flex-end">${editing?`<button class="btn btn-ghost" data-a="q-cancel">Annuler</button><button class="btn btn-primary" data-a="q-save" data-id="${r.id}">Enregistrer les modifications</button>`:`<button class="btn btn-ghost" data-a="q-skip" data-inv="${i.id}" data-id="${r.id}">Ignorer</button><button class="btn btn-ghost" data-a="q-edit" data-id="${r.id}">${ic('edit',14)}Modifier</button><button class="btn btn-green" data-a="q-approve" data-inv="${i.id}" data-id="${r.id}">${ic('send',15)}Approuver et envoyer</button>`}</div></div>`;
+  }).join('');
+  const none = !q.length && !ready.length;
+  return `<div class="page-head"><div><h1>Relances à valider</h1><p>Relisez, modifiez si besoin, puis approuvez : c’est vous qui décidez de ce qui part.</p></div>${q.length?`<div class="actions"><button class="btn btn-green" data-a="approve-all">${ic('check',16)}Tout approuver (${q.length})</button></div>`:''}</div>
+  <div class="reassure">${ic('shield',20)}<div style="flex:1">Aucun e-mail ni message WhatsApp ne sera envoyé à vos clients sans votre validation manuelle préalable.</div><div>${emailChip()}</div></div>
+  ${cards}${waSection}
+  ${none?`<div class="card"><div class="empty"><div class="ei">${ic('check',26)}</div><h3 style="margin-bottom:6px;color:var(--text)">Tout est à jour 🎉</h3><p>Aucune relance en attente. Utilisez « +1 jour (démo) » en haut pour voir PayRelance préparer les prochaines étapes, ou testez en conditions réelles depuis le tableau de bord.</p></div></div>`:''}`;
+}
+
+/* ----------------------- Clients ----------------------- */
+function clientStats(c){
+  const inv = S.invoices.filter(i=>i.client===c.name);
+  const paid = inv.filter(i=>i.status==='paid'), over = inv.filter(i=>i.status==='overdue'||i.status==='collection');
+  const settled = paid.length+over.length;
+  const onTime = paid.filter(i=>i.paidDay<=i.due).length;
+  const score = settled ? Math.round(onTime/settled*100) : 100;
+  const avg = paid.length ? Math.round(paid.reduce((s,i)=>s+(i.paidDay-i.issued),0)/paid.length) : null;
+  const risk = over.some(i=>od(i)>15||i.status==='collection') ? 'risk' : (over.length ? 'watch' : 'ok');
+  return {n:inv.length, out:over.reduce((s,i)=>s+i.amount,0), score, avg, risk};
+}
+function vClients(){
+  return `<div class="page-head"><div><h1>Clients</h1><p>Le comportement de paiement de chaque client et le scénario qui lui est appliqué.</p></div></div>
+  <div class="card"><div class="tablewrap"><table><thead><tr><th>Client</th><th>Contact</th><th class="num">Factures</th><th class="num">Impayé</th><th class="num">Délai moyen</th><th>Ponctualité</th><th>Scénario</th><th>Profil</th><th></th></tr></thead><tbody>${S.clients.map(c=>{const s=clientStats(c);return `<tr><td><button class="cell-main" style="text-align:left;color:var(--brand)" data-a="client-filter" data-id="${esc(c.name)}">${esc(c.name)}</button></td><td><div>${esc(c.contact)}</div><div class="cell-sub">${esc(c.email)}</div></td><td class="num">${s.n}</td><td class="num mono">${s.out?`<b style="color:var(--coral-ink)">${eur(s.out)}</b>`:'—'}</td><td class="num">${s.avg==null?'—':s.avg+' j'}</td><td><span class="scoreb"><i style="width:${s.score}%;background:${s.score>=60?'var(--green)':s.score>=30?'#F59E0B':'var(--coral)'}"></i></span>${s.score} %</td><td><select data-c="client-scn" data-id="${c.id}" style="height:32px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);padding:0 8px;max-width:190px"><option value="" ${!c.scenario?'selected':''}>Par défaut</option>${S.scenarios.map(x=>`<option value="${x.id}" ${c.scenario===x.id?'selected':''}>${esc(x.name)}</option>`).join('')}</select></td><td><span class="badge ${s.risk==='ok'?'b-green':s.risk==='watch'?'b-amber':'b-red'}">${s.risk==='ok'?'Fiable':s.risk==='watch'?'À surveiller':'À risque'}</span></td><td class="num"><button class="btn btn-ghost btn-sm" data-a="client-edit" data-id="${c.id}">Modifier</button></td></tr>`;}).join('')}</tbody></table></div></div>`;
+}
+
+/* ----------------------- Recouvrement ----------------------- */
+function vRecouvrement(){
+  const over = S.invoices.filter(i=>i.status==='overdue').sort((a,b)=>od(b)-od(a));
+  return `<div class="page-head"><div><h1>Escalade & mise en demeure</h1><p>Quand les relances ne suffisent plus : un courrier formel prérédigé, envoyé par e-mail depuis PayRelance.</p></div></div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card card-pad"><div class="card-head" style="margin-bottom:6px"><h3>Inclus dans la V1</h3><span class="badge b-green">Disponible</span></div>
+      ${[['1','Relances automatiques','E-mail et WhatsApp, selon votre scénario, avec validation avant envoi.'],['2','Mise en demeure par e-mail','Un courrier formel prérempli avec les données de la facture, relu par vous puis envoyé.']].map(([n,t,d])=>`<div class="check"><div class="cb" style="border-color:var(--brand-btn);color:var(--brand);font-weight:700;font-size:12px">${n}</div><div><b>${t}</b><span>${d}</span></div></div>`).join('')}
+      <p class="sub" style="margin-top:10px">Rappel : en B2B, tout retard de paiement entraîne de plein droit des pénalités de retard et une indemnité forfaitaire de 40 € (art. L. 441-10 et D. 441-5 du Code de commerce). Modèle indicatif — à faire valider par un professionnel du droit en cas de doute.</p></div>
+    <div class="card card-pad" style="background:linear-gradient(160deg,var(--surface-2),var(--surface))"><div class="card-head" style="margin-bottom:6px"><h3>Prévu en V2</h3><span class="badge b-gray">Feuille de route</span></div>
+      ${[['Courrier recommandé automatisé','Nécessite un prestataire postal et un contrat d’intégration.'],['API WhatsApp Business','Envoi 100 % automatique et accusés de réception (validation Meta + serveur).'],['Transmission à un partenaire de recouvrement','Contrat partenaire et suivi de dossier à mettre en place.']].map(([t,d])=>`<div class="check"><div class="cb" style="border-style:dashed">${ic('lock',11,'style="color:var(--dim)"')}</div><div><b style="font-weight:600">${t}</b><span>${d}</span></div></div>`).join('')}
+      <p class="sub" style="margin-top:10px">La V1 se concentre volontairement sur ce qui est techniquement fiable dès aujourd’hui : e-mail et WhatsApp.</p></div>
+  </div>
+  <div class="card"><div class="card-head" style="padding:20px 20px 0"><div><h3>Factures éligibles à une mise en demeure</h3><div class="sub">Factures en retard</div></div></div>
+    ${over.length?`<div class="tablewrap"><table><thead><tr><th>Facture</th><th>Client</th><th class="num">Montant</th><th>Retard</th><th>Relances</th><th></th></tr></thead><tbody>${over.map(i=>`<tr><td>n°${i.id}</td><td><div class="cell-main">${esc(i.client)}</div></td><td class="num mono"><b>${eur(i.amount)}</b></td><td><span class="badge ${od(i)>15?'b-red':'b-amber'}">${od(i)} j</span></td><td>${i.reminders.filter(r=>r.status==='sent').length} envoyée(s)${i.demeureSent?' <span class="badge b-blue">Mise en demeure envoyée</span>':''}</td><td class="num"><button class="btn btn-coral btn-sm" data-a="demeure" data-id="${i.id}">${ic('scale',14)}Mise en demeure</button></td></tr>`).join('')}</tbody></table></div>`:`<div class="empty"><div class="ei">${ic('check',24)}</div><b>Aucun dossier à escalader</b><p>Aucune facture en retard.</p></div>`}</div>`;
+}
+
+/* ----------------------- Intégrations ----------------------- */
+const INTEGS = [
+  {k:'pennylane',n:'Pennylane',d:'Comptabilité & facturation',c:'#1E3A8A'},
+  {k:'quickbooks',n:'QuickBooks',d:'Comptabilité en ligne',c:'#16A34A'},
+  {k:'stripe',n:'Stripe',d:'Paiements & factures',c:'#6D5BF6'},
+  {k:'freebe',n:'Freebe',d:'Facturation pour freelances',c:'#0EA5E9'},
+  {k:'henrri',n:'Henrri',d:'Facturation gratuite',c:'#F59E0B'}
+];
+function vIntegrations(){
+  const em = emailReady();
+  const local = location.protocol==='file:' && !CFG.publicUrl && !CFG.payTpl;
+  return `<div class="page-head"><div><h1>Intégrations & plugins</h1><p>Les canaux d’envoi de la V1 : e-mail et WhatsApp. Branchez-les ici pour envoyer de vraies relances.</p></div></div>
+  <h3 style="margin-bottom:12px">Canaux d’envoi</h3>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin-bottom:26px">
+    <div class="card integ"><div class="it"><div class="logo-tile" style="background:#1E3A8A">${ic('mail',22)}</div><div style="flex:1"><b>E-mail</b><div class="sub">Envoi réel via EmailJS (Gmail, Outlook…)</div></div>${em?'<span class="badge b-green">Envoi réel</span>':'<span class="badge b-amber">Simulation</span>'}</div>
+      <p class="sub">${em?'Les relances sont envoyées pour de vrai depuis votre messagerie, aux clients que vous avez saisis. Les clients fictifs de la démo ne reçoivent jamais de vrais e-mails.':'Connectez votre messagerie en 5 minutes pour envoyer de vraies relances. Sans configuration, les e-mails sont simulés.'}</p>
+      <div class="actions"><button class="btn btn-primary btn-sm" data-a="email-setup">${em?'Modifier la configuration':'Configurer l’envoi réel'}</button>${em?`<button class="btn btn-ghost btn-sm" data-a="email-setup" data-v="test">Envoyer un e-mail de test</button>`:''}</div></div>
+    <div class="card integ"><div class="it"><div class="logo-tile" style="background:#16A34A">${ic('wa',22)}</div><div style="flex:1"><b>WhatsApp</b><div class="sub">Message prérédigé (click-to-chat)</div></div><span class="badge b-green">Actif</span></div>
+      <p class="sub">Le message s’ouvre dans WhatsApp, déjà rédigé avec le lien de paiement : il ne reste qu’à appuyer sur Envoyer. L’envoi 100 % automatique (API WhatsApp Business) est prévu en V2.</p>
+      <div class="actions"><button class="btn btn-ghost btn-sm" data-a="wa-test">Tester WhatsApp</button></div></div>
+    <div class="card integ"><div class="it"><div class="logo-tile" style="background:#10B981">${ic('card',22)}</div><div style="flex:1"><b>Paiement</b><div class="sub">Page de paiement client</div></div><span class="badge b-green">Actif</span></div>
+      <p class="sub">Chaque message contient un lien vers une page de paiement dédiée à la facture. Dès que le client paie, la facture passe en « payée ». ${CFG.payTpl?'Votre lien personnalisé est utilisé.':''}</p>
+      ${local?`<div class="sub" style="color:var(--amber-ink)">${ic('alert',12)} Vous ouvrez le fichier en local : le lien reçu par e-mail ne fonctionnera que sur cet ordinateur. Hébergez le fichier puis indiquez son URL.</div>`:''}
+      <div class="actions"><button class="btn btn-ghost btn-sm" data-a="pay-setup">Configurer</button></div></div>
+  </div>
+  <h3 style="margin-bottom:4px">Synchronisation des factures</h3>
+  <p class="sub" style="margin-bottom:12px">L’import CSV et la saisie manuelle sont réels. Les connecteurs de logiciels ci-dessous sont simulés dans cette démo (exemple de factures importées).</p>
+  <div class="grid g4" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${INTEGS.map(x=>`<div class="card integ"><div class="it"><div class="logo-tile" style="background:${x.c}">${x.n.charAt(0)}</div><div style="flex:1"><b>${x.n}</b><div class="sub">${x.d}</div></div>${S.integ[x.k]?'<span class="badge b-green">Connecté</span>':'<span class="badge b-gray">Inactif</span>'}</div>
+    ${S.integ[x.k]?`<div class="sub">Dernière synchronisation : à l’instant</div><div class="actions"><button class="btn btn-ghost btn-sm" data-a="sync" data-id="${x.k}">${ic('refresh',14)}Synchroniser</button><button class="btn btn-ghost btn-sm" data-a="disconnect" data-id="${x.k}">Déconnecter</button></div>`:`<button class="btn btn-primary btn-sm" data-a="connect" data-id="${x.k}">Connecter en 1 clic</button>`}</div>`).join('')}
+    <div class="card integ"><div class="it"><div class="logo-tile" style="background:#475569">${ic('upload',20)}</div><div style="flex:1"><b>Fichier CSV</b><div class="sub">Import manuel ou saisie</div></div><span class="badge b-green">Réel</span></div><button class="btn btn-ghost btn-sm" data-a="import">Importer des factures</button></div></div>
+  <div class="banner blue" style="margin-top:18px"><div class="bi" style="color:var(--brand)">${ic('shield',20)}</div><div class="bt"><b>Lecture seule, sécurisé</b><span>PayRelance ne peut ni modifier ni supprimer vos factures. Vous pouvez déconnecter un outil à tout moment.</span></div></div>`;
+}
+
+/* ----------------------- Parrainage ----------------------- */
+function vParrainage(){
+  const subs = S.referrals.filter(r=>r.status==='sub').length;
+  return `<div class="page-head"><div><h1>Parrainage</h1><p>Parrainez un autre freelance : vous gagnez tous les deux 1 mois gratuit.</p></div></div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card card-pad"><h3 style="margin-bottom:12px">Votre lien de parrainage</h3><div class="copybox"><code>payrelance.app/r/${S.refCode}</code><button class="btn btn-primary btn-sm" data-a="copy" data-v="payrelance.app/r/${S.refCode}">${ic('copy',14)}Copier</button></div>
+      <div class="field" style="margin-top:18px;margin-bottom:8px"><label>Inviter par e-mail</label><div style="display:flex;gap:8px"><input id="ref-mail" type="email" placeholder="prenom@freelance.fr" style="flex:1"><button class="btn btn-green" data-a="invite">${ic('send',14)}Inviter</button></div></div>
+      <div class="field" style="margin-bottom:0"><label>Message à partager (LinkedIn, WhatsApp…)</label><textarea id="ref-msg" style="min-height:90px">J’ai arrêté de courir après mes factures : PayRelance envoie les relances à ma place, sans froisser mes clients. Essai gratuit de 14 jours via mon lien : payrelance.app/r/${S.refCode}</textarea><div style="margin-top:8px"><button class="btn btn-ghost btn-sm" data-a="copy-el" data-v="ref-msg">${ic('copy',14)}Copier le message</button></div></div></div>
+    <div class="card card-pad" style="background:linear-gradient(160deg,var(--green-soft),var(--surface))"><h3>Vos récompenses</h3><div class="grid g2" style="margin:16px 0;gap:12px"><div><div class="sub">Invitations envoyées</div><div style="font-family:var(--font-d);font-size:30px;font-weight:800">${S.referrals.length}</div></div><div><div class="sub">Mois gratuits gagnés</div><div style="font-family:var(--font-d);font-size:30px;font-weight:800;color:var(--green-ink)">${S.freeMonths}</div></div></div><p class="sub">Chaque filleul qui s’abonne vous offre 1 mois gratuit, à lui aussi. ${subs?`<b>${subs} filleul${subs>1?'s':''} abonné${subs>1?'s':''} 🎉</b>`:''}</p></div>
+  </div>
+  <div class="card"><div class="card-head" style="padding:20px 20px 0"><h3>Mes filleuls</h3></div>${S.referrals.length?`<div class="tablewrap"><table><thead><tr><th>E-mail</th><th>Invité le</th><th>Statut</th><th></th></tr></thead><tbody>${S.referrals.map((r,idx)=>`<tr><td>${esc(r.email)}</td><td>${fmtD(r.day)}</td><td><span class="badge ${r.status==='sub'?'b-green':'b-gray'}">${r.status==='sub'?'Abonné — 1 mois offert':'Invitation envoyée'}</span></td><td class="num">${r.status!=='sub'?`<button class="btn btn-ghost btn-sm" data-a="ref-sub" data-id="${idx}">Simuler son abonnement</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:`<div class="empty"><p>Aucun filleul pour le moment. Invitez un premier freelance ci-dessus.</p></div>`}</div>`;
+}
+
+/* ----------------------- Abonnement ----------------------- */
+function vAbonnement(){
+  const used = S.invoices.length, lim = planLimit(), p = effPlan();
+  const tl = trialLeft();
+  const cur = S.plan;
+  return `<div class="page-head"><div><h1>Abonnement</h1><p>14 jours d’essai gratuit sans carte bancaire, puis une offre adaptée à votre volume. Sans engagement.</p></div></div>
+  <div class="card card-pad" style="margin-bottom:18px"><div class="grid g2" style="gap:24px;align-items:center"><div><div class="sub">Offre actuelle</div><div style="font-family:var(--font-d);font-size:24px;font-weight:800;margin:2px 0">${planLabel()}${cur==='trial'&&tl>0?` <span class="badge b-green" style="vertical-align:middle">${tl} j restants</span>`:''}</div><p class="sub">${cur==='trial'?(tl>0?'Toutes les fonctionnalités Pro sont ouvertes pendant l’essai.':'Votre essai est terminé : l’offre Solo s’applique tant que vous n’avez pas choisi.'):eur(PLANS[cur].price)+' / mois · prochaine facturation dans 30 jours'}</p></div>
+    <div><div style="display:flex;justify-content:space-between;margin-bottom:6px"><b>Factures suivies</b><span class="mono">${used} / ${lim===Infinity?'∞':lim}</span></div><div class="bar"><i style="width:${lim===Infinity?10:Math.min(100,used/lim*100)}%;${used>lim?'background:var(--coral)':''}"></i></div>${used>lim?`<p class="sub" style="color:var(--coral-ink);margin-top:6px">Limite dépassée — passez à l’offre supérieure.</p>`:''}</div></div></div>
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr))">${Object.keys(PLANS).map(k=>{const x=PLANS[k];const isCur=cur===k;return `<div class="card plan ${isCur?'cur':k==='pro'?'pop':''}">${isCur?'<span class="tag" style="background:var(--green-btn)">Votre offre</span>':k==='pro'?'<span class="tag">Le plus choisi</span>':''}<h3>${x.name}</h3><div class="sub">${x.who}</div><div class="price">${x.price} €<small> / mois</small></div><ul>${x.feat.map(f=>`<li>${ic('check',16)}<span>${f}</span></li>`).join('')}</ul>${isCur?'<button class="btn btn-ghost" disabled>Offre actuelle</button>':`<button class="btn ${k==='pro'?'btn-primary':'btn-ghost'}" data-a="choose-plan" data-id="${k}">Choisir ${x.name}</button>`}</div>`;}).join('')}</div>
+  <p class="sub" style="margin-top:14px">Commission optionnelle, uniquement sur les créances recouvrées via la phase de recouvrement amiable/juridique. Aucun frais caché.</p>`;
+}
+
+const VIEWS = {dashboard:vDashboard,factures:vFactures,validation:vValidation,relances:vRelances,clients:vClients,recouvrement:vRecouvrement,integrations:vIntegrations,parrainage:vParrainage,abonnement:vAbonnement};
+
+/* =========================================================
+   Render + overlays
+   ========================================================= */
+function render(){
+  renderSidebar(); renderTop();
+  $('#view').innerHTML = VIEWS[S.view]();
+  renderMenus();
+}
+function renderMenus(){
+  const un = S.notifs.filter(n=>n.unread).length;
+  const ago = d => { const k=S.day-d; return k<=0?'Aujourd’hui':k===1?'Hier':`Il y a ${k} j`; };
+  $('#notifmenu').innerHTML = `<div class="dd-title" style="display:flex;justify-content:space-between;align-items:center"><span>Notifications</span>${un?`<button class="btn btn-ghost btn-sm" data-a="read-all">Tout marquer comme lu</button>`:''}</div>${S.notifs.length?S.notifs.slice(0,8).map((n,idx)=>{const [bg,fg]=toneColors(n.tone);return `<button class="notif-item dd-item ${n.unread?'unread':''}" data-a="open-notif" data-id="${idx}"><div class="ni" style="background:${bg};color:${fg}">${ic(n.icon||'bell',15)}</div><div style="flex:1"><div>${esc(n.t)}</div><div class="sub">${ago(n.day)}</div></div></button>`;}).join(''):'<div class="empty" style="padding:24px">Aucune notification</div>'}`;
+  $('#usermenu').innerHTML = `<div style="display:flex;gap:10px;align-items:center;padding:8px 10px 10px"><div class="avatar" style="width:40px;height:40px">${esc(S.user.first.charAt(0))}</div><div><b>${esc(meName())}</b><div class="sub">${esc(S.user.email)}</div></div></div><div class="dd-sep"></div>
+    <button class="dd-item" data-a="profile">${ic('user',16)}Mon profil</button>
+    <button class="dd-item" data-a="prefs">${ic('bell',16)}Préférences de notification</button>
+    <button class="dd-item" data-a="go" data-v="abonnement">${ic('card',16)}Abonnement</button>
+    <div class="dd-title">Apparence</div><div class="seg"><button class="${S.theme==='auto'?'on':''}" data-a="theme" data-v="auto">Auto</button><button class="${S.theme==='light'?'on':''}" data-a="theme" data-v="light">Clair</button><button class="${S.theme==='dark'?'on':''}" data-a="theme" data-v="dark">Sombre</button></div>
+    <div class="dd-sep"></div>
+    <button class="dd-item" data-a="advance">${ic('refresh',16)}Avancer d’un jour (démo)</button>
+    <button class="dd-item" data-a="tour">${ic('help',16)}Revoir la visite guidée</button>
+    <button class="dd-item" data-a="reset">${ic('refresh',16)}Réinitialiser la démo</button>`;
+  $('#notifmenu').classList.toggle('open',S.notifMenu);
+  $('#usermenu').classList.toggle('open',S.userMenu);
+}
+function toast(msg,type='ok'){
+  const el = document.createElement('div'); el.className='toast '+type; el.innerHTML = ic(type==='ok'?'checkc':'alert',18)+'<span>'+esc(msg)+'</span>';
+  $('#toasts').appendChild(el); setTimeout(()=>{ el.style.opacity='0'; el.style.transition='opacity .3s'; setTimeout(()=>el.remove(),300); },3600);
+}
+function openModal(html,cls=''){ $('#modal').innerHTML = `<div class="overlay" data-bg="modal"><div class="modal ${cls}" role="dialog" aria-modal="true">${html}</div></div>`; document.body.classList.add('noscroll'); }
+function closeModal(){ $('#modal').innerHTML=''; if(!$('#drawer').innerHTML) document.body.classList.remove('noscroll'); }
+function openDrawer(html){ $('#drawer').innerHTML = `<div class="drawer-bg" data-bg="drawer"><div class="drawer" role="dialog" aria-modal="true">${html}</div></div>`; document.body.classList.add('noscroll'); }
+function closeDrawer(){ $('#drawer').innerHTML=''; if(!$('#modal').innerHTML) document.body.classList.remove('noscroll'); }
+const mh = (t,sub) => `<div class="modal-h"><div><h2>${t}</h2>${sub?`<p class="sub" style="margin-top:4px">${sub}</p>`:''}</div><button class="x" data-a="close-modal" aria-label="Fermer">${ic('x',18)}</button></div>`;
+
+/* ---------- invoice drawer ---------- */
+function openInvoice(id){
+  const i = inv$(id); if(!i) return;
+  const s = statusOf(i), c = client$(i.client), sc = scenarioFor(i);
+  const evs = i.events.slice().sort((a,b)=>b.day-a.day);
+  const q = i.reminders.filter(r=>r.status==='queued');
+  const open = i.status==='overdue' || i.status==='upcoming';
+  openDrawer(`<div class="drawer-h"><div><div class="sub">Facture n°${i.id}</div><h2 style="font-size:22px;margin:2px 0 6px">${esc(i.client)}</h2><span class="badge ${s.cls}">${s.label}</span></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><button class="x" data-a="close-drawer" aria-label="Fermer">${ic('x',18)}</button><div style="font-family:var(--font-d);font-size:24px;font-weight:800" class="mono">${eur(i.amount)}</div></div></div>
+  <div class="drawer-b">
+    <div class="kv"><div><span>Émission</span><b>${fmtDL(i.issued)}</b></div><div><span>Échéance</span><b>${fmtDL(i.due)}</b></div><div><span>Contact</span><b>${esc(c?c.contact:'—')}</b></div><div><span>Source</span><b>${esc(i.source)}</b></div><div><span>Scénario</span><b>${esc(sc.name)}</b></div><div><span>Relances envoyées</span><b>${i.reminders.filter(r=>r.status==='sent').length}</b></div></div>
+    <div class="sub" style="margin-bottom:6px">Lien de paiement client (CB, virement, prélèvement)</div>
+    <div class="copybox"><code>${payLink(i)}</code><button class="btn btn-ghost btn-sm" data-a="copy" data-v="${payLink(i)}">${ic('copy',14)}Copier</button></div>
+    ${i.status==='overdue' && q.length?`<div class="banner coral" style="margin:16px 0 0;padding:12px 14px"><div class="bt"><b>Relance en attente de votre validation</b><span>${CH[q[0].channel].label} · étape ${q[0].step+1}</span></div><button class="btn btn-green btn-sm" data-a="q-approve" data-inv="${i.id}" data-id="${q[0].id}">Approuver</button></div>`:''}
+    ${open?`<div class="actions" style="margin:18px 0">${i.status==='overdue'?`<button class="btn btn-coral" data-a="compose" data-id="${i.id}">${ic('send',15)}Relancer maintenant</button>`:''}<button class="btn btn-green" data-a="sim-pay" data-id="${i.id}">${ic('card',15)}Simuler le paiement client</button><button class="btn btn-ghost" data-a="mark-paid" data-id="${i.id}">Marquer comme payée</button></div>
+    <div class="actions" style="margin-bottom:18px">${i.status==='overdue'?`<button class="btn btn-ghost btn-sm" data-a="demeure" data-id="${i.id}">${ic('scale',14)}Mise en demeure</button>`:''}<button class="btn btn-ghost btn-sm" data-a="toggle-pause" data-id="${i.id}">${ic('pause',14)}${i.paused?'Reprendre les relances':'Mettre les relances en pause'}</button></div>`:''}
+    ${i.status==='collection'?`<div class="actions" style="margin:18px 0"><button class="btn btn-ghost" data-a="end-coll" data-id="${i.id}">Retirer du recouvrement</button><button class="btn btn-green" data-a="sim-pay" data-id="${i.id}">Simuler le règlement</button></div>`:''}
+    <h3 style="margin:6px 0 10px">Historique</h3>
+    <div class="timeline">${evs.map(e=>`<div class="tl ${e.tone||''}"><b>${esc(e.t)}</b><small>${esc(e.s||'')} · ${fmtD(e.day)}</small></div>`).join('')}</div>
+  </div>`);
+}
+function refreshDrawer(){ const d=$('#drawer .drawer'); if(!d) return; const idt = S._drawerInv; if(idt) { const sc=d.scrollTop; openInvoice(idt); const nd=$('#drawer .drawer'); if(nd) nd.scrollTop=sc; } }
+
+/* ---------- compose modal ---------- */
+let CM = null;
+function openCompose(id){
+  const i = inv$(id); if(!i) return;
+  const sc = scenarioFor(i);
+  const stepIdx = Math.max(0, Math.min(sc.steps.length-1, sc.steps.reduce((m,s,ix)=> (s.delay<=od(i)?ix:m),0)));
+  const st = sc.steps[stepIdx] || {channel:'email',tone:'friendly'};
+  CM = {id:i.id,channel:canUse(st.channel)?st.channel:'email',tone:st.tone,edited:false};
+  composeRender(true);
+}
+function composeRender(first){
+  const i = inv$(CM.id); const m = buildMessage(i,CM.channel,CM.tone);
+  const keepSub = !first && $('#cm-sub') ? $('#cm-sub').value : null, keepTxt = !first && $('#cm-txt') ? $('#cm-txt').value : null;
+  const subject = CM.edited && keepSub!=null ? keepSub : m.subject;
+  const text = CM.edited && keepTxt!=null ? keepTxt : m.text;
+  const c = client$(i.client);
+  const html = `${mh(`Relancer ${esc(c?c.contact:i.client)}`,`Facture n°${i.id} · ${eur(i.amount)} · ${od(i)} jours de retard`)}<div class="modal-b">
+    <div class="field"><label>Canal</label><div class="pills">${Object.keys(CH).map(k=>`<button class="pill ${CM.channel===k?'on':''}" data-a="cm-ch" data-v="${k}">${ic(CH[k].icon,14)}${CH[k].label}</button>`).join('')}</div></div>
+    <div class="field"><label>Ton</label><div class="pills">${Object.keys(TONES).map(k=>`<button class="pill ${CM.tone===k?'on':''}" data-a="cm-tone" data-v="${k}">${TONES[k]}</button>`).join('')}</div></div>
+    ${CM.channel==='email'?`<div class="field"><label>Objet</label><input id="cm-sub" value="${esc(subject)}" data-i="cm-edit"></div>`:''}
+    <div class="field"><label>Message</label><textarea id="cm-txt" data-i="cm-edit" style="min-height:190px">${esc(text)}</textarea></div>
+    <div class="reassure" style="margin-bottom:6px">${ic('shield',18)}<div style="flex:1">${CM.channel==='email'?'En cliquant sur « Envoyer », vous validez ce message : il part immédiatement.':'Le message s’ouvrira dans WhatsApp, prêt à envoyer d’un clic.'}</div>${CM.channel==='email'?`<div>${emailChip()}</div>`:''}</div></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button>${CM.channel==='email'?`<button class="btn btn-ghost" data-a="cm-mailto">Ouvrir dans ma messagerie</button>`:''}<button class="btn btn-green" data-a="cm-send">${ic('send',15)}${CM.channel==='email'?'Envoyer maintenant':'Préparer dans WhatsApp'}</button></div>`;
+  if(first) openModal(html,'wide'); else { $('#modal .modal').innerHTML = html; }
+}
+
+/* ---------- mise en demeure ---------- */
+function demeureText(i){
+  const c = client$(i.client);
+  const sent = i.reminders.filter(r=>r.status==='sent').map(r=>fmtDM(r.day));
+  return `${S.user.company}\n${meName()}\n\nÀ l’attention de ${i.client}${c?` — ${c.contact}`:''}\n\nEnvoyée par e-mail\nFait le ${fmtDL(S.day)}\n\nObjet : Mise en demeure de payer — facture n°${i.id}\n\nMadame, Monsieur,\n\nMalgré ${sent.length?`mes relances des ${sent.join(', ')}`:'mes demandes de règlement'}, la facture n°${i.id} d’un montant de ${eur(i.amount)}, émise le ${fmtDM(i.issued)} et échue le ${fmtDM(i.due)}, demeure impayée à ce jour (${od(i)} jours de retard).\n\nPar la présente, je vous mets en demeure de régler la somme de ${eur(i.amount)} dans un délai de 8 jours à compter de la réception de ce courrier.\n\nJe vous rappelle que, conformément aux articles L. 441-10 et D. 441-5 du Code de commerce, tout retard de paiement entraîne de plein droit des pénalités de retard ainsi qu’une indemnité forfaitaire de 40 € pour frais de recouvrement.\n\nÀ défaut de règlement dans ce délai, je transmettrai le dossier à un partenaire de recouvrement et me réserve le droit d’engager toute action utile pour obtenir le paiement de ma créance.\n\nVeuillez agréer, Madame, Monsieur, l’expression de mes salutations distinguées.\n\n${meName()}`;
+}
+function openDemeure(id){
+  const i = inv$(id); if(!i) return;
+  const c = client$(i.client);
+  openModal(`${mh('Mise en demeure','Courrier formel prérédigé, envoyé par e-mail — relisez-le avant envoi')}<div class="modal-b">
+    <div class="sub" style="margin-bottom:8px">À : ${esc(c?c.email:'')} · Objet : Mise en demeure de payer — facture n°${i.id}</div>
+    <div class="field" style="margin-bottom:8px"><textarea id="dem-txt" style="min-height:300px;font-family:Georgia,serif;line-height:1.55">${esc(demeureText(i))}</textarea></div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${emailChip()}<span class="sub">Modèle indicatif — à faire valider par un professionnel du droit en cas de doute.</span></div></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="copy-el" data-v="dem-txt">${ic('copy',14)}Copier le texte</button><button class="btn btn-primary" data-a="dem-send" data-id="${i.id}">${ic('mail',15)}Envoyer par e-mail</button></div>`,'wide');
+}
+
+/* =========================================================
+   Actions (delegated)
+   ========================================================= */
+const A = {
+  go(t){ S.view=t.dataset.v; S.userMenu=false; S.notifMenu=false; closeDrawer(); closeMenu(); render(); window.scrollTo(0,0); },
+  'open-menu'(){ $('#sidebar').classList.add('open'); $('#scrim').classList.add('open'); },
+  'close-menu'(){ closeMenu(); },
+  advance(){
+    S.day++;
+    const newly=[];
+    S.invoices.forEach(i=>{ if(i.status==='upcoming' && i.due<S.day){ i.status='overdue'; i.events.push({day:S.day,tone:'coral',t:'Échéance dépassée',s:'Facture passée en retard'}); newly.push(i); } });
+    newly.forEach(i=>{ logActivity('coral','alert',`Facture n°${i.id} de ${i.client} arrivée à échéance — ${eur(i.amount)}`); notify('coral','alert',`Facture n°${i.id} (${i.client}) est en retard`,'factures'); });
+    const n = runEngine();
+    render();
+    toast(`${fmtDL(S.day)} — ${newly.length?`${newly.length} ${plural(newly.length,'nouveau retard')} détecté${newly.length>1?'s':''}. `:''}${n?`${n} ${plural(n,'relance préparée','relances préparées')}.`:'Rien de nouveau à relancer.'}`);
+  },
+  'toggle-notifs'(){ S.notifMenu=!S.notifMenu; S.userMenu=false; renderMenus(); },
+  'toggle-user'(){ S.userMenu=!S.userMenu; S.notifMenu=false; renderMenus(); },
+  'read-all'(){ S.notifs.forEach(n=>n.unread=false); renderTop(); renderMenus(); },
+  'open-notif'(t){ const n=S.notifs[+t.dataset.id]; if(!n) return; n.unread=false; S.notifMenu=false; if(n.v){ S.view=n.v; } render(); },
+  theme(t){ S.theme=t.dataset.v; applyTheme(); renderMenus(); },
+  'close-modal'(){ closeModal(); },
+  'close-drawer'(){ S._drawerInv=null; closeDrawer(); },
+  async 'approve-all'(){
+    const q = queued(); if(!q.length) return;
+    let sent=0, ready=0, err=0;
+    toast('Envoi en cours…');
+    try{ for(const {inv,r} of q){ const res = await deliver(inv,r); if(res==='sent') sent++; else if(res==='ready') ready++; else err++; } }catch(e){ err++; }
+    if(sent||ready) notify('green','send',`${sent} ${plural(sent,'relance envoyée','relances envoyées')}${ready?` · ${ready} WhatsApp à ouvrir`:''}`,'validation');
+    render();
+    toast(`${sent} ${plural(sent,'relance envoyée','relances envoyées')}${ready?` · ${ready} ${plural(ready,'message WhatsApp prêt','messages WhatsApp prêts')} à ouvrir`:''}${err?` · ${err} en erreur`:''}.`, err?'warn':'ok');
+  },
+  async 'q-approve'(t){
+    const i=inv$(t.dataset.inv); const r=i&&i.reminders.find(x=>x.id===t.dataset.id); if(!r) return;
+    t.disabled=true;
+    const res = await deliver(i,r);
+    render(); refreshDrawer();
+    if(res==='ready') openWaModal(i,r); else if(res==='sent') toast(sentToast(i,r));
+  },
+  'q-skip'(t){ const i=inv$(t.dataset.inv); const r=i&&i.reminders.find(x=>x.id===t.dataset.id); if(!r) return; r.status='skipped'; i.lastStep=Math.max(i.lastStep,r.step); i.events.push({day:S.day,tone:'',t:'Relance ignorée',s:'Vous avez choisi de ne pas l’envoyer'}); render(); toast('Relance ignorée.','warn'); },
+  'q-edit'(t){ S.qEdit=t.dataset.id; render(); },
+  'q-cancel'(){ S.qEdit=null; render(); },
+  'q-save'(t){ const id=t.dataset.id; S.invoices.forEach(i=>i.reminders.forEach(r=>{ if(r.id===id){ const tx=$('#q-txt-'+id); const sb=$('#q-sub-'+id); if(tx) r.text=tx.value; if(sb) r.subject=sb.value; r.tone=r.tone; } })); S.qEdit=null; render(); toast('Modifications enregistrées.'); },
+  compose(t,e){ e.stopPropagation(); S._drawerInv=null; closeDrawer(); openCompose(t.dataset.id); },
+  'cm-ch'(t){ const k=t.dataset.v; if(!canUse(k)){ toast('Ce canal nécessite l’offre Pro. Passez à Pro pour l’activer.','warn'); return; } CM.channel=k; CM.edited=false; composeRender(); },
+  'cm-tone'(t){ CM.tone=t.dataset.v; CM.edited=false; composeRender(); },
+  async 'cm-send'(){
+    const i=inv$(CM.id); const sub=$('#cm-sub'), tx=$('#cm-txt'); const btn=$('[data-a="cm-send"]'); if(btn) btn.disabled=true;
+    const r={id:uid(),step:null,channel:CM.channel,tone:CM.tone,subject:sub?sub.value:'',text:tx.value,status:'queued',day:S.day};
+    i.reminders.push(r);
+    const res = await deliver(i,r);
+    if(res==='error'){ i.reminders=i.reminders.filter(x=>x!==r); if(btn) btn.disabled=false; return; }
+    i.reminders.filter(x=>x!==r && x.status==='queued').forEach(x=>x.status='cancelled');
+    closeModal(); render();
+    if(res==='ready') openWaModal(i,r); else toast(sentToast(i,r));
+  },
+  'cm-mailto'(){
+    const i=inv$(CM.id); const c=client$(i.client); const sub=$('#cm-sub'), tx=$('#cm-txt');
+    const a=document.createElement('a'); a.href='mailto:'+encodeURIComponent(c?c.email:'')+'?subject='+encodeURIComponent(sub?sub.value:'')+'&body='+encodeURIComponent(tx.value); a.click();
+    toast('Message ouvert dans votre messagerie : vérifiez puis envoyez-le depuis là.');
+  },
+  'open-inv'(t,e){ if(e.target.closest('input[type=checkbox]')||(e.target.closest('[data-a="compose"]'))) return; S._drawerInv=t.dataset.id; openInvoice(t.dataset.id); },
+  'sim-pay'(t){ const i=inv$(t.dataset.id); if(!i) return; const m=markPaid(i,true); render(); refreshDrawer(); toast(m); },
+  'mark-paid'(t){ const i=inv$(t.dataset.id); if(!i) return; const m=markPaid(i,false); render(); refreshDrawer(); toast(m); },
+  'toggle-pause'(t){ const i=inv$(t.dataset.id); i.paused=!i.paused; i.events.push({day:S.day,tone:'',t:i.paused?'Relances mises en pause':'Relances reprises',s:''}); if(!i.paused) runEngine(); render(); refreshDrawer(); toast(i.paused?'Relances en pause pour cette facture.':'Relances reprises.','warn'); },
+    sel(t,e){ e.stopPropagation(); const id=t.dataset.id; if(S.sel.has(id)) S.sel.delete(id); else S.sel.add(id); $('#bulk').innerHTML=bulkBar(); },
+  'clear-sel'(){ S.sel.clear(); $('#invtable').innerHTML=invTableInner(); $('#bulk').innerHTML=''; },
+  'bulk-queue'(){
+    let n=0;
+    S.sel.forEach(id=>{ const i=inv$(id); if(!i||i.status!=='overdue'||i.reminders.some(r=>r.status==='queued')) return;
+      const m=buildMessage(i,'email','friendly'); i.reminders.push({id:uid(),step:null,channel:'email',tone:'friendly',subject:m.subject,text:m.text,status:'queued',day:S.day}); n++; });
+    S.sel.clear(); S.view='validation'; render(); toast(n?`${n} ${plural(n,'relance préparée','relances préparées')} — à valider.`:'Rien à préparer pour cette sélection.', n?'ok':'warn');
+  },
+  filter(t){ S.f.status=t.dataset.v; $('#view').innerHTML=vFactures(); },
+  sort(t){ const k=t.dataset.v; if(S.f.sort===k) S.f.dir*=-1; else { S.f.sort=k; S.f.dir=1; } $('#invtable').innerHTML=invTableInner(); },
+  'client-filter'(t){ S.f.client=t.dataset.id; S.f.status='all'; S.view='factures'; render(); },
+  'clear-client'(){ S.f.client=null; render(); },
+  import(){ openImport('csv'); },
+  'imp-tab'(t){ openImport(t.dataset.v); },
+  'imp-sample'(){ const d=(n)=>{const x=dateOf(n);return String(x.getDate()).padStart(2,'0')+'/'+String(x.getMonth()+1).padStart(2,'0')+'/'+x.getFullYear();}; $('#csv-txt').value=`numero;client;email;montant;echeance\n112;Collectif Alba;compta@alba.example;1450;${d(-9)}\n113;Brasserie Lumen;gerant@lumen.example;820;${d(-2)}\n114;Agence Pixel;paie@pixel.example;2100;${d(14)}`; },
+  'imp-go'(){ importCSV($('#csv-txt').value); },
+  'imp-manual'(){ importManual(); },
+  connect(t){ openConnect(t.dataset.id); },
+  'conn-go'(t){ doConnect(t.dataset.id); },
+  disconnect(t){ S.integ[t.dataset.id]=false; render(); toast(`${INTEGS.find(x=>x.k===t.dataset.id).n} déconnecté. Vos factures déjà importées sont conservées.`,'warn'); },
+  sync(t){ const x=INTEGS.find(x=>x.k===t.dataset.id); logActivity('blue','refresh',`${x.n} synchronisé — aucune nouvelle facture`); render(); toast(`${x.n} synchronisé : tout est à jour.`); },
+  'pick-scn'(t){ S.edit.scenarioId=t.dataset.id; S.edit.step=0; render(); },
+  'default-scn'(){ S.defaultScenario=S.edit.scenarioId; render(); toast('Scénario défini par défaut.'); },
+  'dup-scn'(){ const sc=curScenario(); const n={id:'s'+Date.now(),name:sc.name+' (copie)',steps:sc.steps.map(s=>Object.assign({},s))}; S.scenarios.push(n); S.edit.scenarioId=n.id; render(); toast('Scénario dupliqué.'); },
+  'save-scn'(){ S.flags.scenario=true; const n=runEngine(); render(); toast('Scénario enregistré.'+(n?` ${n} ${plural(n,'nouvelle relance préparée','nouvelles relances préparées')}.`:'')); },
+  'pick-step'(t,e){ if(e.target.closest('input,select,button,label')) return; S.edit.step=+t.dataset.id; render(); },
+  'add-step'(){ const sc=curScenario(); const last=sc.steps[sc.steps.length-1]; sc.steps.push({delay:(last?last.delay:0)+7,channel:'email',tone:'firm',on:true,custom:''}); S.edit.step=sc.steps.length-1; render(); },
+  'del-step'(t,e){ e.stopPropagation(); const sc=curScenario(); if(sc.steps.length<=1){ toast('Un scénario doit contenir au moins une étape.','warn'); return; } sc.steps.splice(+t.dataset.id,1); S.edit.step=0; render(); },
+  'ins-var'(t){ const ta=$('#custom-txt'); const st=curScenario().steps[S.edit.step]; ta.focus(); const s=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,s)+t.dataset.v+ta.value.slice(ta.selectionEnd||s); st.custom=ta.value; $('#prev-box').innerHTML=stepPreview(); },
+  'load-tpl'(){ const st=curScenario().steps[S.edit.step]; const b=baseTpl(st.channel,st.tone); st.custom=b.b; render(); },
+  'reset-tpl'(){ curScenario().steps[S.edit.step].custom=''; render(); },
+  'copy'(t){ copyText(t.dataset.v); },
+  'copy-el'(t){ const el=$('#'+t.dataset.v); if(el) copyText(el.value); },
+  invite(){ const v=($('#ref-mail').value||'').trim(); if(!/^\S+@\S+\.\S+$/.test(v)){ toast('Saisissez une adresse e-mail valide.','warn'); return; } S.referrals.unshift({email:v,day:S.day,status:'sent'}); render(); toast(`Invitation envoyée à ${v}.`); },
+  'ref-sub'(t){ const r=S.referrals[+t.dataset.id]; r.status='sub'; S.freeMonths++; notify('green','gift','Un filleul s’est abonné : 1 mois gratuit pour vous deux !','parrainage'); render(); toast('1 mois gratuit gagné pour vous deux 🎁'); },
+  'choose-plan'(t){ openCheckout(t.dataset.id); },
+  'pay-go'(t){ const k=t.dataset.id; closeModal(); S.plan=k; render(); toast(`Offre ${PLANS[k].name} activée — merci !`); },
+  profile(){ S.userMenu=false; renderMenus(); openProfile(); },
+  'profile-save'(){ S.user.first=$('#pf-first').value.trim()||S.user.first; S.user.last=$('#pf-last').value.trim()||S.user.last; S.user.email=$('#pf-mail').value.trim()||S.user.email; S.user.company=$('#pf-co').value.trim()||S.user.company; closeModal(); render(); toast('Profil mis à jour.'); },
+  prefs(){ S.userMenu=false; renderMenus(); openPrefs(); },
+  tour(){ S.userMenu=false; renderMenus(); startTour(0); },
+  'tour-next'(t){ startTour(+t.dataset.id); },
+  'tour-end'(){ S.flags.tour=true; closeModal(); },
+  reset(){ S.userMenu=false; const th=S.theme; S=seed(); S.theme=th; closeModal(); closeDrawer(); runEngine(); render(); toast('Démo réinitialisée.'); },
+  demeure(t,e){ e.stopPropagation(); closeDrawer(); S._drawerInv=null; openDemeure(t.dataset.id); },
+  async 'dem-send'(t){
+    const i=inv$(t.dataset.id); const tx=$('#dem-txt'); const btn=$('[data-a="dem-send"]'); if(btn) btn.disabled=true;
+    const r={id:uid(),step:null,channel:'email',tone:'firm',subject:`Mise en demeure de payer — facture n°${i.id}`,text:tx.value+(S.payLink?`\n\nPour régler en ligne : ${payLink(i)}`:''),status:'queued',day:S.day};
+    i.reminders.push(r);
+    const res = await deliver(i,r);
+    if(res==='error'){ i.reminders=i.reminders.filter(x=>x!==r); if(btn) btn.disabled=false; return; }
+    i.reminders.filter(x=>x!==r && x.status==='queued').forEach(x=>x.status='cancelled');
+    i.demeureSent=true; i.events.push({day:S.day,tone:'coral',t:'Mise en demeure envoyée par e-mail',s:r.mode==='real'?'Envoi réel':'Envoi simulé'});
+    logActivity('coral','mail',`Mise en demeure envoyée par e-mail à ${i.client} — facture n°${i.id}${r.mode==='sim'?' — simulation':''}`);
+    closeModal(); render(); toast('Mise en demeure : '+sentToast(i,r));
+  },
+  'wa-sent'(t){
+    const i=inv$(t.dataset.inv); const r=i&&i.reminders.find(x=>x.id===t.dataset.id);
+    setTimeout(()=>{ if(r && r.status==='ready'){ sendReminder(i,r,'wa'); } closeModal(); render(); refreshDrawer(); toast('Message WhatsApp ouvert : appuyez sur Envoyer dans WhatsApp.'); },80);
+  },
+  'wa-cancel'(t){ const i=inv$(t.dataset.inv); const r=i&&i.reminders.find(x=>x.id===t.dataset.id); if(r) r.status='queued'; render(); },
+  'real-test'(){ openRealTest(); },
+  'real-test-go'(){ doRealTest(); },
+  'client-edit'(t){ openClientEdit(t.dataset.id); },
+  'client-save'(t){ const c=S.clients.find(x=>x.id===t.dataset.id); c.contact=$('#ce-name').value.trim()||c.contact; c.email=$('#ce-mail').value.trim(); c.phone=$('#ce-phone').value.trim(); closeModal(); render(); toast('Contact mis à jour.'); },
+  'email-setup'(t){ openEmailSetup(t.dataset.v==='test'); },
+  'email-save'(){ readEmailFields(); saveCfg(); closeModal(); render(); toast(emailReady()?'Envoi e-mail réel activé.':'Configuration enregistrée (incomplète : l’envoi reste simulé).', emailReady()?'ok':'warn'); },
+  async 'email-test'(){
+    readEmailFields(); saveCfg();
+    const st=$('#em-status'); const to=($('#em-to').value||'').trim();
+    if(!emailReady()){ st.innerHTML=`<div class="reassure" style="background:var(--amber-soft);color:var(--amber-ink)">${ic('alert',16)}<div>Renseignez les trois identifiants avant de tester.</div></div>`; return; }
+    if(!/^\S+@\S+\.\S+$/.test(to)){ st.innerHTML=`<div class="reassure" style="background:var(--amber-soft);color:var(--amber-ink)">${ic('alert',16)}<div>Saisissez une adresse e-mail valide pour recevoir le test.</div></div>`; return; }
+    st.innerHTML='<div class="sub">Envoi en cours…</div>';
+    try{
+      await emailjsSend(to,'',`Test PayRelance — l’envoi réel fonctionne ✅`,`Bonjour,\n\nCeci est un e-mail de test envoyé depuis votre plateforme PayRelance.\n\nSi vous le lisez, l’envoi réel des relances est correctement configuré.\n\n${S.user.first} ${S.user.last}`,{invoice_number:'TEST',amount:eur(150),pay_link:payBase()});
+      st.innerHTML=`<div class="reassure">${ic('check',16)}<div>E-mail de test envoyé à <b>${esc(to)}</b>. Vérifiez votre boîte (et les courriers indésirables).</div></div>`;
+      render();
+    }catch(e){ st.innerHTML=`<div class="reassure" style="background:var(--coral-soft);color:var(--coral-ink)">${ic('alert',16)}<div>Échec : ${esc(e.message)}. Vérifiez les trois identifiants, que le service est bien connecté, et que le modèle contient {{to_email}} comme destinataire.</div></div>`; }
+  },
+  'email-clear'(){ CFG.emailjs={service:'',template:'',key:''}; saveCfg(); closeModal(); render(); toast('Configuration e-mail supprimée : retour en mode simulation.','warn'); },
+  'email-share'(){
+    readEmailFields(); if(!emailReady()){ toast('Renseignez d’abord les trois identifiants.','warn'); return; }
+    const o={emailjs:CFG.emailjs,publicUrl:CFG.publicUrl,payTpl:CFG.payTpl};
+    const link = payBase()+'#cfg='+btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+    copyText(link);
+  },
+  'wa-test'(){ openWaTest(); },
+  'wa-test-go'(){
+    const n=normPhone($('#wt-phone').value); if(!n){ toast('Saisissez un numéro valide (ex. 06 12 34 56 78 ou +33 6 12 34 56 78).','warn'); return; }
+    const a=document.createElement('a'); a.href=waUrl($('#wt-phone').value,'Bonjour 👋 Ceci est un message de test envoyé depuis PayRelance : l’intégration WhatsApp fonctionne ✅'); a.target='_blank'; a.rel='noopener'; a.click(); closeModal();
+  },
+  'pay-setup'(){ openPaySetup(); },
+  'pay-save'(){ CFG.publicUrl=($('#ps-url').value||'').trim(); CFG.payTpl=($('#ps-tpl').value||'').trim(); saveCfg(); closeModal(); render(); toast('Paramètres de paiement enregistrés.'); },
+};
+function closeMenu(){ $('#sidebar').classList.remove('open'); $('#scrim').classList.remove('open'); }
+function copyText(v){
+  const done = () => toast('Copié dans le presse-papiers.');
+  try{ if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(v).then(done,()=>fallbackCopy(v,done)); return; } }catch(e){}
+  fallbackCopy(v,done);
+}
+function fallbackCopy(v,done){ const ta=document.createElement('textarea'); ta.value=v; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); done(); }
+
+/* ---------- WhatsApp modal ---------- */
+function openWaModal(i,r){
+  const c = client$(i.client); const url = waUrl(c.phone,r.text);
+  openModal(`${mh('Message prêt dans WhatsApp',`À ${esc(c.contact)} · ${esc(c.phone)}`)}<div class="modal-b"><div class="preview">${previewHTML('whatsapp',{text:r.text},i)}</div><p class="sub" style="margin-top:12px">L’API WhatsApp Business (envoi 100 % automatique) est prévue en V2. En V1, le message s’ouvre déjà rédigé, lien de paiement inclus : il ne reste qu’à appuyer sur Envoyer.</p></div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Plus tard</button><a class="btn btn-green" href="${esc(url)}" target="_blank" rel="noopener" data-a="wa-sent" data-inv="${i.id}" data-id="${r.id}">${ic('wa',16)}Ouvrir WhatsApp et envoyer</a></div>`);
+}
+
+/* ---------- test en conditions réelles ---------- */
+function openRealTest(){
+  openModal(`${mh('Recevoir une vraie relance','Une facture de test de 150 € en retard est créée à votre nom')}<div class="modal-b">
+    <div class="field"><label>Votre prénom</label><input id="rt-name" placeholder="Camille" autocomplete="given-name"></div>
+    <div class="field"><label>Votre e-mail <span class="sub">(vous y recevrez la relance)</span></label><input id="rt-mail" type="email" placeholder="vous@exemple.fr" autocomplete="email"></div>
+    <div class="field"><label>Votre numéro WhatsApp <span class="sub">(optionnel)</span></label><input id="rt-phone" placeholder="06 12 34 56 78" autocomplete="tel"></div>
+    <div class="reassure" style="margin-bottom:6px">${ic('shield',18)}<div style="flex:1">Rien ne part sans votre validation : vous relirez le message dans « À valider » avant de l’envoyer.</div><div>${emailChip()}</div></div></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-green" data-a="real-test-go">${ic('send',15)}Préparer mes relances</button></div>`);
+}
+function doRealTest(){
+  const name=($('#rt-name').value||'').trim(), mail=($('#rt-mail').value||'').trim(), phone=($('#rt-phone').value||'').trim();
+  if(!name){ toast('Indiquez votre prénom.','warn'); return; }
+  if(!/^\S+@\S+\.\S+$/.test(mail)){ toast('Saisissez une adresse e-mail valide.','warn'); return; }
+  if(phone && !normPhone(phone)){ toast('Numéro WhatsApp invalide (ex. 06 12 34 56 78 ou +33 6 12 34 56 78).','warn'); return; }
+  const cname = `${name} (test)`;
+  const c = {id:'cT'+Date.now()%100000,name:cname,contact:name,email:mail,phone:phone,scenario:null,real:true};
+  S.clients.push(c);
+  const id = String(Math.max(...S.invoices.map(x=>+x.id||0))+1);
+  const i = {id,client:cname,amount:150,issued:-30,due:-4,status:'overdue',source:'Test en conditions réelles',reminders:[],events:[{day:-30,tone:'blue',t:'Facture émise',s:'Facture de test'},{day:-4,tone:'coral',t:'Échéance dépassée',s:'Facture passée en retard'}],paused:false,lastStep:-1,live:false};
+  S.invoices.push(i);
+  const em = buildMessage(i,'email','friendly');
+  i.reminders.push({id:uid(),step:null,channel:'email',tone:'friendly',subject:em.subject,text:em.text,status:'queued',day:S.day});
+  if(phone){ const wm = buildMessage(i,'whatsapp','friendly'); i.reminders.push({id:uid(),step:null,channel:'whatsapp',tone:'friendly',subject:'',text:wm.text,status:'queued',day:S.day}); }
+  S.testDone=true; S.flags.first=S.flags.first;
+  logActivity('blue','send',`Facture de test créée pour ${name} — ${phone?'2 relances':'1 relance'} à valider`);
+  notify('coral','alert',`Vos relances de test sont prêtes à être validées`,'validation');
+  closeModal(); S.view='validation'; render(); window.scrollTo(0,0);
+  toast(emailReady()?'Relances prêtes : approuvez-les pour recevoir un vrai e-mail.':'Relances prêtes. Astuce : configurez l’envoi réel dans Intégrations pour recevoir un vrai e-mail.');
+}
+
+/* ---------- édition d'un contact client ---------- */
+function openClientEdit(id){
+  const c = S.clients.find(x=>x.id===id);
+  openModal(`${mh(`Contact — ${esc(c.name)}`)}<div class="modal-b"><div class="field"><label>Nom du contact</label><input id="ce-name" value="${esc(c.contact)}"></div><div class="field"><label>E-mail</label><input id="ce-mail" type="email" value="${esc(c.email)}"></div><div class="field"><label>Numéro WhatsApp</label><input id="ce-phone" value="${esc(c.phone)}"></div><p class="sub">Les adresses en « .example » et les numéros 06 39 98 xx xx sont fictifs : aucun message réel n’y est envoyé. Saisissez de vraies coordonnées pour tester l’envoi.</p></div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-primary" data-a="client-save" data-id="${c.id}">Enregistrer</button></div>`);
+}
+
+/* ---------- plugin e-mail ---------- */
+const MAIL_TEMPLATE_HTML = `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#0F172A;max-width:560px">
+{{{message_html}}}
+<hr style="border:none;border-top:1px solid #E2E8F0;margin:24px 0 12px">
+<p style="font-size:12px;color:#64748B">Message envoyé via PayRelance pour le compte de {{from_name}} — facture n°{{invoice_number}} ({{amount}}). Répondre à : {{reply_to}}</p>
+</div>`;
+function readEmailFields(){
+  const g = id => { const el=$('#'+id); return el ? el.value.trim() : null; };
+  const s=g('em-service'), t=g('em-template'), k=g('em-key'), u=g('em-url');
+  if(s!=null) CFG.emailjs.service=s; if(t!=null) CFG.emailjs.template=t; if(k!=null) CFG.emailjs.key=k; if(u!=null) CFG.publicUrl=u;
+}
+function openEmailSetup(focusTest){
+  const c = CFG.emailjs;
+  const step = (n,t) => `<div class="gstep"><div class="gn">${n}</div><div class="gt">${t}</div></div>`;
+  openModal(`${mh('Envoi réel d’e-mails','Connectez votre messagerie via EmailJS (service gratuit) — environ 5 minutes')}<div class="modal-b">
+    ${step(1,'<b>Créez un compte</b> sur <b>emailjs.com</b> (gratuit).')}
+    ${step(2,'<b>Email Services</b> → <i>Add new service</i> → connectez Gmail ou Outlook. Copiez le <b>Service ID</b>.')}
+    ${step(3,`<b>Email Templates</b> → <i>Create new template</i>. Renseignez : <i>To email</i> = <code>{{to_email}}</code>, <i>Reply-to</i> = <code>{{reply_to}}</code>, <i>From name</i> = <code>{{from_name}}</code>, <i>Subject</i> = <code>{{subject}}</code>, puis collez ce contenu HTML :<textarea id="em-tpl" readonly style="width:100%;min-height:96px;margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;border:1px solid var(--line-strong);border-radius:10px;padding:8px;background:var(--surface-2)">${esc(MAIL_TEMPLATE_HTML)}</textarea><button class="btn btn-ghost btn-sm" style="margin-top:6px" data-a="copy-el" data-v="em-tpl">${ic('copy',14)}Copier le modèle</button> Copiez le <b>Template ID</b>.`)}
+    ${step(4,'<b>Account</b> → copiez la <b>Public Key</b>.')}
+    <div class="row2" style="margin-top:12px"><div class="field"><label>Service ID</label><input id="em-service" value="${esc(c.service)}" placeholder="service_xxxxxxx" autocomplete="off"></div><div class="field"><label>Template ID</label><input id="em-template" value="${esc(c.template)}" placeholder="template_xxxxxxx" autocomplete="off"></div></div>
+    <div class="field"><label>Public Key</label><input id="em-key" value="${esc(c.key)}" placeholder="Votre clé publique EmailJS" autocomplete="off"></div>
+    <div class="field"><label>URL publique de cette plateforme <span class="sub">(optionnel — pour que le lien de paiement fonctionne chez le destinataire)</span></label><input id="em-url" value="${esc(CFG.publicUrl)}" placeholder="https://mon-site.netlify.app/" autocomplete="off"></div>
+    <div class="field"><label>Envoyer un e-mail de test à</label><div style="display:flex;gap:8px"><input id="em-to" type="email" value="${esc(S.user.email)}" style="flex:1"><button class="btn btn-ghost" data-a="email-test">Tester l’envoi</button></div></div>
+    <div id="em-status"></div>
+    <p class="sub">La clé publique est faite pour être visible côté navigateur. Dans EmailJS, vous pouvez restreindre les domaines autorisés. Par sécurité, les clients fictifs de la démo ne reçoivent jamais de vrais e-mails.</p></div>
+    <div class="modal-f" style="justify-content:space-between"><div class="actions"><button class="btn btn-ghost btn-sm" data-a="email-share" title="Copie un lien qui active automatiquement cette configuration chez la personne qui l’ouvre">${ic('link',14)}Copier le lien de démo (avec cette configuration)</button>${emailReady()?`<button class="btn btn-coral btn-sm" data-a="email-clear">Supprimer</button>`:''}</div><div class="actions"><button class="btn btn-ghost" data-a="close-modal">Fermer</button><button class="btn btn-primary" data-a="email-save">Enregistrer</button></div></div>`,'wide');
+  if(focusTest){ const el=$('#em-to'); if(el) el.focus(); }
+}
+function openWaTest(){
+  openModal(`${mh('Tester WhatsApp','Le message s’ouvre dans WhatsApp, prêt à envoyer')}<div class="modal-b"><div class="field"><label>Votre numéro WhatsApp</label><input id="wt-phone" placeholder="06 12 34 56 78 ou +33 6 12 34 56 78" autocomplete="tel"></div><p class="sub">Ce test ouvre WhatsApp (application ou WhatsApp Web) avec un message de test déjà rédigé.</p></div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-green" data-a="wa-test-go">${ic('wa',15)}Ouvrir WhatsApp</button></div>`);
+}
+function openPaySetup(){
+  const local = location.protocol==='file:';
+  openModal(`${mh('Page de paiement client','Ce que le client voit en cliquant sur le lien reçu')}<div class="modal-b">
+    <p style="margin-bottom:12px">Chaque message contient un lien vers une page de paiement dédiée à la facture (montant, client, fournisseur). Quand le client paie, la facture passe automatiquement en « payée » si PayRelance est ouvert dans le même navigateur — démonstration sans serveur.</p>
+    ${local?`<div class="reassure" style="background:var(--amber-soft);color:var(--amber-ink)">${ic('alert',16)}<div>Vous ouvrez le fichier en local : pour que le lien fonctionne chez le destinataire, hébergez ce fichier (ex. Netlify Drop) puis indiquez son URL ci-dessous.</div></div>`:''}
+    <div class="field"><label>URL publique de cette plateforme</label><input id="ps-url" value="${esc(CFG.publicUrl)}" placeholder="https://mon-site.netlify.app/"></div>
+    <div class="field"><label>Ou votre propre lien de paiement <span class="sub">(Stripe Payment Link, PayPal.me…)</span></label><input id="ps-tpl" value="${esc(CFG.payTpl)}" placeholder="https://paypal.me/votrenom/{montant}EUR"><div class="sub" style="margin-top:4px">Variables : {numero} {montant} {client}. Laissez vide pour utiliser la page de paiement PayRelance.</div></div></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-primary" data-a="pay-save">Enregistrer</button></div>`);
+}
+
+/* ---------- page de paiement (côté client final) ---------- */
+function renderPayPage(){
+  document.title = 'Paiement sécurisé — PayRelance';
+  const q = new URLSearchParams(location.hash.split('?')[1]||'');
+  const n=q.get('n')||'—', m=Number(q.get('m')||0), c=q.get('c')||'Client', f=q.get('f')||'Votre fournisseur';
+  document.body.innerHTML = `<div class="pay-page"><div class="pay-card">
+    <div class="brand" style="padding:0 0 16px;justify-content:center">${LOGO(34)}<div>PayRelance<small>Paiement sécurisé</small></div></div>
+    <div id="pay-main">
+      <div class="pay-sum"><div class="sub">Facture n°${esc(n)} · ${esc(c)}</div><div class="pay-amount mono">${eur(m)}</div><div class="sub">à régler à <b>${esc(f)}</b></div></div>
+      <div class="tabs"><button class="on" data-pt="card">Carte bancaire</button><button data-pt="vir">Virement</button></div>
+      <div id="pay-card"><div class="field"><label>Numéro de carte</label><input id="pc-n" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19"></div><div class="row2"><div class="field"><label>Expiration</label><input placeholder="MM / AA" maxlength="7"></div><div class="field"><label>CVC</label><input placeholder="123" maxlength="3" inputmode="numeric"></div></div></div>
+      <div id="pay-vir" hidden><div class="field"><label>Bénéficiaire</label><input value="${esc(f)}" readonly></div><div class="field"><label>IBAN (exemple)</label><input value="FR76 3000 0000 0000 0000 0000 000" readonly></div><div class="field"><label>Référence à indiquer</label><input value="Facture ${esc(n)}" readonly></div></div>
+      <button class="btn btn-green" id="pay-go" style="width:100%;height:48px;margin-top:6px;font-size:15px">${ic('lock',15)}Payer ${eur(m)}</button>
+      <p class="sub" style="text-align:center;margin-top:12px">Démonstration PayRelance : aucun débit réel n’est effectué.</p>
+    </div>
+    <div id="pay-ok" hidden style="text-align:center;padding:10px 0 4px"><div class="ei" style="width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green-ink);margin:0 auto 14px;display:flex;align-items:center;justify-content:center">${ic('check',32)}</div><h2 style="font-size:22px;margin-bottom:6px">Paiement reçu, merci !</h2><p class="sub">La facture n°${esc(n)} de ${eur(m)} est réglée. ${esc(f)} est prévenu(e).</p><p class="sub" style="margin-top:12px">Dans cette démo, la plateforme du fournisseur se met à jour en direct si elle est ouverte dans le même navigateur.</p></div>
+  </div></div>`;
+  $$('[data-pt]').forEach(b=>b.addEventListener('click',()=>{ $$('[data-pt]').forEach(x=>x.classList.toggle('on',x===b)); $('#pay-card').hidden=b.dataset.pt!=='card'; $('#pay-vir').hidden=b.dataset.pt!=='vir'; }));
+  const pn=$('#pc-n'); if(pn) pn.addEventListener('input',()=>{ const v=pn.value.replace(/\D/g,'').slice(0,16); pn.value=v.replace(/(.{4})/g,'$1 ').trim(); });
+  $('#pay-go').addEventListener('click',()=>{
+    const b=$('#pay-go'); b.disabled=true; b.textContent='Paiement en cours…';
+    setTimeout(()=>{
+      $('#pay-main').hidden=true; $('#pay-ok').hidden=false;
+      const msg={type:'paid',n:n,m:m,t:Date.now()};
+      try{ const bc=new BroadcastChannel('payrelance'); bc.postMessage(msg); bc.close(); }catch(e){}
+      try{ localStorage.setItem('payrelance-paid',JSON.stringify(msg)); }catch(e){}
+    },1300);
+  });
+}
+function onPaid(msg){
+  if(!msg || msg.type!=='paid') return;
+  const i = inv$(msg.n); if(!i || i.status==='paid') return;
+  const m = markPaid(i,true); render(); refreshDrawer();
+  toast('💳 '+m+' — paiement reçu en direct');
+}
+
+/* ---------- import ---------- */
+function openImport(tab){
+  const csv = `<div class="dz"><div style="margin-bottom:8px">${ic('upload',26)}</div><b style="color:var(--text)">Déposez un fichier CSV</b><div class="sub" style="margin:4px 0 10px">Colonnes : numero ; client ; email ; montant ; echeance (JJ/MM/AAAA)</div><input type="file" id="csv-file" accept=".csv,text/csv" data-c="csv-file"></div>
+    <div class="field" style="margin-top:14px;margin-bottom:6px"><label>ou collez vos lignes <button class="btn btn-ghost btn-sm" style="margin-left:8px" data-a="imp-sample">Charger un exemple</button></label><textarea id="csv-txt" placeholder="numero;client;email;montant;echeance" style="min-height:130px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px"></textarea></div>`;
+  const man = `<div class="row2"><div class="field"><label>Client</label><input id="m-client" placeholder="Nom de l’entreprise"></div><div class="field"><label>E-mail du client</label><input id="m-mail" type="email" placeholder="compta@client.fr"></div></div>
+    <div class="row2"><div class="field"><label>Montant (€)</label><input id="m-amount" type="number" min="1" placeholder="1200"></div><div class="field"><label>Téléphone (WhatsApp)</label><input id="m-phone" placeholder="+33 6 …"></div></div>
+    <div class="row2"><div class="field"><label>Date d’émission</label><input id="m-issued" type="date" value="${dateOf(-20).toISOString().slice(0,10)}"></div><div class="field"><label>Date d’échéance</label><input id="m-due" type="date" value="${dateOf(-3).toISOString().slice(0,10)}"></div></div>`;
+  openModal(`${mh('Ajouter des factures','Importez un fichier ou saisissez une facture à la main')}<div class="modal-b"><div class="tabs"><button class="${tab==='csv'?'on':''}" data-a="imp-tab" data-v="csv">Import CSV</button><button class="${tab==='man'?'on':''}" data-a="imp-tab" data-v="man">Saisie manuelle</button></div>${tab==='csv'?csv:man}</div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-primary" data-a="${tab==='csv'?'imp-go':'imp-manual'}">${ic('plus',15)}Ajouter</button></div>`);
+}
+function parseDate(s){
+  s=String(s||'').trim(); let d;
+  if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){ const [dd,mm,yy]=s.split('/').map(Number); d=new Date(yy,mm-1,dd,12); }
+  else if(/^\d{4}-\d{2}-\d{2}$/.test(s)){ const [yy,mm,dd]=s.split('-').map(Number); d=new Date(yy,mm-1,dd,12); }
+  else return null;
+  return Math.round((d-BASE)/86400000);
+}
+function addInvoice(o){
+  let c = S.clients.find(x=>x.name.toLowerCase()===o.client.toLowerCase());
+  if(!c){ c={id:'c'+(S.clients.length+1)+Date.now()%1000,name:o.client,contact:o.client,email:o.email||'',phone:o.phone||'',scenario:null}; S.clients.push(c); }
+  else { if(o.email) c.email=o.email; if(o.phone) c.phone=o.phone; }
+  const nextId = String(o.id && !inv$(o.id) ? o.id : Math.max(...S.invoices.map(i=>+i.id||0))+1);
+  const i = {id:nextId,client:c.name,amount:o.amount,issued:o.issued,due:o.due,status:o.due<S.day?'overdue':'upcoming',source:o.source||'Import CSV',reminders:[],events:[{day:o.issued,tone:'blue',t:'Facture émise',s:'Importée dans PayRelance'}],paused:false,lastStep:-1,live:false};
+  S.invoices.push(i); return i;
+}
+function afterImport(n,late,srcLabel){
+  const created = runEngine();
+  logActivity('blue','upload',`${n} ${plural(n,'facture importée','factures importées')} (${srcLabel})${late?` — ${late} en retard détectée${late>1?'s':''}`:''}`);
+  if(late) notify('coral','alert',`${late} ${plural(late,'facture en retard détectée','factures en retard détectées')} — relances prêtes`,'validation');
+  closeModal(); render(); toast(`${n} ${plural(n,'facture importée','factures importées')}${late?` · ${late} en retard détectée${late>1?'s':''}`:''}${created?` · ${created} ${plural(created,'relance prête','relances prêtes')} à valider`:''}.`);
+}
+function importCSV(text){
+  const lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){ toast('Collez ou chargez au moins une ligne.','warn'); return; }
+  let n=0,late=0,bad=0;
+  lines.forEach(l=>{
+    const cells = l.split(/[;,\t]/).map(x=>x.trim());
+    if(cells.length>=5 && isNaN(Number(cells[0])) && isNaN(Number(String(cells[3]).replace(',','.')))) return; // en-tête
+    if(cells.length<5) { bad++; return; }
+    const amount = Number(String(cells[3]).replace(/\s/g,'').replace(',','.')); const due = parseDate(cells[4]);
+    if(!amount || due==null){ bad++; return; }
+    const i = addInvoice({id:cells[0],client:cells[1],email:cells[2],amount,issued:due-30,due,source:'Import CSV'});
+    n++; if(i.status==='overdue') late++;
+  });
+  if(!n){ toast('Aucune ligne valide. Vérifiez le format : numero;client;email;montant;echeance','warn'); return; }
+  afterImport(n,late,'CSV'+(bad?`, ${bad} ligne(s) ignorée(s)`:''));
+}
+function importManual(){
+  const client=$('#m-client').value.trim(), amount=Number($('#m-amount').value), mail=$('#m-mail').value.trim(), phone=$('#m-phone').value.trim();
+  const issued=parseDate($('#m-issued').value), due=parseDate($('#m-due').value);
+  if(!client||!amount||issued==null||due==null){ toast('Renseignez au moins le client, le montant et les dates.','warn'); return; }
+  const i = addInvoice({client,email:mail,phone,amount,issued,due,source:'Saisie manuelle'});
+  afterImport(1,i.status==='overdue'?1:0,'saisie manuelle');
+}
+
+/* ---------- integrations connect ---------- */
+const INTEG_DATA = {
+  pennylane:[['Studio Kiwi',850,-4,'kiwi@studio-kiwi.example'],['Agence Lumen',1400,9,'admin@lumen.example']],
+  quickbooks:[['Atelier Sol',990,-8,'sol@atelier-sol.example'],['Maison Verde',1750,12,'compta@maison-verde.example']],
+  stripe:[['Boutique Aube',620,-3,'aube@boutique-aube.example'],['Cabinet Moreau',1300,6,'moreau@cabinet-moreau.example']],
+  freebe:[['Léo Dupuis Conseil',1100,-5,'leo@dupuis-conseil.example'],['Atelier Iris',780,10,'iris@atelier-iris.example']],
+  henrri:[['Café Marlot',540,-6,'cafe@marlot.example'],['Studio Rive',1650,15,'rive@studio-rive.example']]
+};
+function openConnect(k){
+  const x = INTEGS.find(i=>i.k===k);
+  openModal(`${mh(`Connecter ${x.n}`,'Autorisation en lecture seule')}<div class="modal-b"><div style="display:flex;gap:14px;align-items:center;justify-content:center;margin:10px 0 18px"><div class="logo-tile" style="background:${x.c};width:54px;height:54px">${x.n.charAt(0)}</div><span class="sub">${ic('arrow',20)}</span>${LOGO(54)}</div>
+    <p style="margin-bottom:10px"><b>PayRelance</b> demande l’accès en <b>lecture seule</b> à :</p>${['Vos factures et leurs échéances','La liste de vos clients et leurs coordonnées','Le statut de paiement de chaque facture'].map(t=>`<div class="check"><div class="cb" style="background:var(--green);border-color:var(--green)">${ic('check',13)}</div><div style="flex:1"><b style="font-weight:500">${t}</b></div></div>`).join('')}<p class="sub" style="margin-top:10px">PayRelance ne pourra ni modifier ni supprimer vos données.</p></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-primary" data-a="conn-go" data-id="${k}">Autoriser l’accès</button></div>`);
+}
+function doConnect(k){
+  const x = INTEGS.find(i=>i.k===k);
+  $('#modal .modal').innerHTML = `${mh(`Synchronisation de ${x.n}`)}<div class="modal-b" style="text-align:center;padding:10px 22px 30px"><div class="spin"></div><b>Import de vos factures…</b><p class="sub">Détection des retards en cours</p></div>`;
+  setTimeout(()=>{
+    S.integ[k]=true; let late=0,n=0;
+    (INTEG_DATA[k]||[]).forEach(([cl,am,due,mail])=>{ const i=addInvoice({client:cl,email:mail,amount:am,issued:due-30,due,source:x.n}); n++; if(i.status==='overdue') late++; });
+    afterImport(n,late,x.n);
+  },1300);
+}
+
+/* ---------- checkout ---------- */
+function openCheckout(k){
+  const p = PLANS[k];
+  openModal(`${mh(`Passer à l’offre ${p.name}`,`${p.price} € / mois · sans engagement`)}<div class="modal-b">
+    <div class="banner blue" style="margin-bottom:14px;padding:10px 14px"><div class="bt"><b>${p.name} — ${p.price} € / mois</b><span>${p.who} · ${p.limit===Infinity?'volume illimité':'jusqu’à '+p.limit+' factures / mois'}</span></div></div>
+    <div class="field"><label>Nom sur la carte</label><input value="${esc(meName())}"></div>
+    <div class="field"><label>Numéro de carte</label><input id="cc-n" inputmode="numeric" placeholder="4242 4242 4242 4242" maxlength="19" data-i="cc-n"></div>
+    <div class="row2"><div class="field"><label>Expiration</label><input placeholder="MM / AA" maxlength="7"></div><div class="field"><label>CVC</label><input placeholder="123" maxlength="3" inputmode="numeric"></div></div>
+    <p class="sub">Démonstration : aucun paiement réel n’est effectué.</p></div>
+    <div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-green" data-a="pay-go" data-id="${k}">${ic('lock',14)}Payer ${p.price} € et activer</button></div>`);
+}
+
+/* ---------- profile / prefs ---------- */
+function openProfile(){
+  openModal(`${mh('Mon profil')}<div class="modal-b"><div class="row2"><div class="field"><label>Prénom</label><input id="pf-first" value="${esc(S.user.first)}"></div><div class="field"><label>Nom</label><input id="pf-last" value="${esc(S.user.last)}"></div></div><div class="field"><label>E-mail professionnel</label><input id="pf-mail" type="email" value="${esc(S.user.email)}"></div><div class="field"><label>Activité / entreprise</label><input id="pf-co" value="${esc(S.user.company)}"></div><p class="sub">Aucun SIRET ni adresse n’est demandé pour démarrer : vous pourrez les ajouter plus tard.</p></div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Annuler</button><button class="btn btn-primary" data-a="profile-save">Enregistrer</button></div>`);
+}
+function openPrefs(){
+  openModal(`${mh('Préférences de notification')}<div class="modal-b"><div class="setting"><div class="st"><b>Récap hebdomadaire de trésorerie</b><span>« Cette semaine, PayRelance a récupéré X € pour vous »</span></div><label class="switch"><input type="checkbox" data-c="pref-weekly" ${S.weeklyRecap?'checked':''}><i></i></label></div><div class="setting"><div class="st"><b>Alerte à chaque paiement reçu</b><span>Notification immédiate quand une facture est réglée</span></div><label class="switch"><input type="checkbox" data-c="pref-pay" ${S.payAlerts?'checked':''}><i></i></label></div></div><div class="modal-f"><button class="btn btn-primary" data-a="close-modal">Terminé</button></div>`);
+}
+
+/* ---------- onboarding tour ---------- */
+const TOUR = [
+  {i:'zap',t:'Bienvenue sur PayRelance',d:'Ne courez plus après votre argent : PayRelance détecte vos factures en retard et relance vos clients à votre place, avec le bon ton et un lien de paiement direct.'},
+  {i:'shield',t:'Vous gardez la main',d:'Aucun e-mail ni message WhatsApp ne sera envoyé à vos clients sans votre validation manuelle préalable. Vous relisez, modifiez ou ignorez chaque relance.'},
+  {i:'send',t:'Votre première relance en 1 clic',d:'Nous avons déjà repéré 3 factures en retard dans votre fichier. Allez dans « À valider » pour envoyer vos premières relances en un clic — ou testez en conditions réelles depuis le tableau de bord pour recevoir une vraie relance.'}
+];
+function startTour(n){
+  const s = TOUR[n]; const last = n===TOUR.length-1;
+  openModal(`<div class="modal-b" style="padding:28px 28px 8px;text-align:center"><div class="stepper">${TOUR.map((_,k)=>`<i class="${k<=n?'on':''}"></i>`).join('')}</div><div style="width:60px;height:60px;border-radius:18px;background:var(--brand-soft);color:var(--brand);display:flex;align-items:center;justify-content:center;margin:6px auto 16px">${ic(s.i,28)}</div><h2 style="font-size:22px;margin-bottom:8px">${s.t}</h2><p style="color:var(--muted)">${s.d}</p></div><div class="modal-f" style="justify-content:space-between;padding:18px 28px 24px"><button class="btn btn-ghost" data-a="tour-end">Passer</button>${last?`<button class="btn btn-green" data-a="tour-end-go">Voir mes relances</button>`:`<button class="btn btn-primary" data-a="tour-next" data-id="${n+1}">Suivant</button>`}</div>`);
+}
+A['tour-end-go'] = ()=>{ S.flags.tour=true; closeModal(); S.view='validation'; render(); };
+
+/* =========================================================
+   Inputs / change / global events
+   ========================================================= */
+const I = {
+  search(t){ S.f.q=t.value; if(S.view!=='factures'){ S.view='factures'; render(); const g=$('#gsearch'); g.focus(); } else { $('#invtable').innerHTML=invTableInner(); } },
+  'step-delay'(t){ const st=curScenario().steps[+t.dataset.id]; st.delay=Math.max(0,Math.min(90,parseInt(t.value||'0',10)||0)); const pb=$('#prev-box'); if(pb && +t.dataset.id===S.edit.step) pb.innerHTML=stepPreview(); },
+  'step-custom'(t){ curScenario().steps[S.edit.step].custom=t.value; $('#prev-box').innerHTML=stepPreview(); },
+  'cm-edit'(){ if(CM) CM.edited=true; },
+  'cc-n'(t){ const v=t.value.replace(/\D/g,'').slice(0,16); t.value=v.replace(/(.{4})/g,'$1 ').trim(); }
+};
+const C = {
+  manual(t){
+    if(!t.checked){
+      t.checked=true;
+      openModal(`${mh('Désactiver la validation manuelle ?')}<div class="modal-b"><div class="banner" style="background:var(--amber-soft);border:1px solid var(--line)"><div class="bt"><b>Attention</b><span>Les relances partiront automatiquement chez vos clients, sans que vous les ayez relues. Nous vous conseillons de garder la validation manuelle pour vos clients importants.</span></div></div></div><div class="modal-f"><button class="btn btn-ghost" data-a="close-modal">Garder la validation</button><button class="btn btn-coral" data-a="manual-off">Désactiver</button></div>`);
+    } else { S.manualValidation=true; render(); }
+  },
+  paylink(t){ S.payLink=t.checked; render(); },
+  biz(t){ S.bizDays=t.checked; },
+  window(t){ S.window=t.value; },
+  'prev-inv'(t){ S.edit.prev=t.value; $('#prev-box').innerHTML=stepPreview(); },
+  'step-channel'(t){ const st=curScenario().steps[+t.dataset.id]; if(!canUse(t.value)) toast('Ce canal nécessite l’offre Pro — l’e-mail sera utilisé en attendant.','warn'); st.channel=t.value; st.custom=''; S.edit.step=+t.dataset.id; render(); },
+  'step-tone'(t){ const st=curScenario().steps[+t.dataset.id]; st.tone=t.value; st.custom=''; S.edit.step=+t.dataset.id; render(); },
+  'step-on'(t){ curScenario().steps[+t.dataset.id].on=t.checked; render(); },
+  'client-scn'(t){ const c=S.clients.find(x=>x.id===t.dataset.id); c.scenario=t.value||null; toast(`Scénario mis à jour pour ${c.name}.`); },
+  'pref-weekly'(t){ S.weeklyRecap=t.checked; },
+  'pref-pay'(t){ S.payAlerts=t.checked; },
+  'csv-file'(t){ const f=t.files&&t.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ const ta=$('#csv-txt'); if(ta) ta.value=String(r.result||''); }; r.readAsText(f); }
+};
+A['manual-off'] = ()=>{ S.manualValidation=false; closeModal(); render(); toast('Validation manuelle désactivée.','warn'); };
+
+document.addEventListener('click', e=>{
+  const bg = e.target.closest('[data-bg]');
+  if(bg && e.target===bg){ if(bg.dataset.bg==='modal') closeModal(); else { S._drawerInv=null; closeDrawer(); } return; }
+  if(!e.target.closest('.rel')){ if(S.userMenu||S.notifMenu){ S.userMenu=false; S.notifMenu=false; renderMenus(); } }
+  const t = e.target.closest('[data-a]'); if(!t) return;
+  const fn = A[t.dataset.a]; if(fn) fn(t,e);
+});
+document.addEventListener('input', e=>{ const t=e.target.closest('[data-i]'); if(t && I[t.dataset.i]) I[t.dataset.i](t,e); });
+document.addEventListener('change', e=>{ const t=e.target.closest('[data-c]'); if(t && C[t.dataset.c]) C[t.dataset.c](t,e); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if($('#modal').innerHTML) closeModal(); else if($('#drawer').innerHTML){ S._drawerInv=null; closeDrawer(); } else closeMenu(); } });
+
+/* ---------- theme ---------- */
+function applyTheme(){
+  const r = document.documentElement;
+  if(S.theme==='auto') r.removeAttribute('data-theme'); else r.setAttribute('data-theme',S.theme);
+  try{ localStorage.setItem('payrelance-theme',S.theme); }catch(e){}
+}
+
+/* ---------- init ---------- */
+S = seed();
+try{ const th=localStorage.getItem('payrelance-theme'); if(th==='light'||th==='dark'||th==='auto') S.theme=th; }catch(e){}
+applyTheme();
+try{
+  if(location.hash.indexOf('#cfg=')===0){
+    const o = JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(5)))));
+    if(o.emailjs) Object.assign(CFG.emailjs,o.emailjs);
+    if(o.publicUrl!=null) CFG.publicUrl=o.publicUrl;
+    if(o.payTpl!=null) CFG.payTpl=o.payTpl;
+    saveCfg(); S._cfgLoaded=true;
+    history.replaceState(null,'',location.pathname+location.search);
+  }
+}catch(e){}
+const PAYMODE = location.hash.indexOf('#/pay')===0;
+window.addEventListener('hashchange',()=>{ if(PAYMODE || location.hash.indexOf('#/pay')===0) location.reload(); });
+if(PAYMODE){ renderPayPage(); return; }
+try{ const bc=new BroadcastChannel('payrelance'); bc.onmessage = e => onPaid(e.data); }catch(e){}
+window.addEventListener('storage',e=>{ if(e.key==='payrelance-paid' && e.newValue){ try{ onPaid(JSON.parse(e.newValue)); }catch(_){} } });
+runEngine();
+render();
+if(S._cfgLoaded) setTimeout(()=>toast('Configuration d’envoi chargée : l’envoi e-mail réel est actif.'),700);
+setTimeout(()=>{ if(!S.flags.tour && !$('#modal').innerHTML) startTour(0); },500);
+window.__PR = { get S(){ return S; }, A };
+})();
+</script>
+</body>
+</html>

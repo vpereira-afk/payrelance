@@ -1,0 +1,13 @@
+{
+  "name": "payrelance",
+  "version": "0.1.0",
+  "private": true,
+  "description": "PayRelance — plateforme SaaS d'automatisation des relances de factures impayées (V1 : e-mail + WhatsApp). Application front-end en un seul fichier.",
+  "scripts": {
+    "dev": "node scripts/serve.cjs",
+    "test": "node tests/e2e.cjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.45.0"
+  }
+}
